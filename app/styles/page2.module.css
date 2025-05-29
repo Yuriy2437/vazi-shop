@@ -1,0 +1,39 @@
+.container {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.background {
+  position: absolute;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  z-index: 1;
+}
+
+.masterBtn {
+  background: #ff0000;
+  color: white;
+  border: none;
+  padding: 1.5rem 3rem;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  width: 100%;
+  max-width: 500px;
+}
+
+.masterBtn:hover {
+  background: #cc0000;
+  transform: scale(1.05);
+}
