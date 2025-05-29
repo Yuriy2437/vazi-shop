@@ -274,24 +274,29 @@
 import { productDetails } from '@/lib/productDetails';
 import ProductDetails from './ProductDetails';
 
+// Тип для параметров маршрута
+type PageProps = {
+  params: Promise<{ id: string }>;
+  searchParams: { lang?: string };
+};
+
+// Генерация статических путей
 export async function generateStaticParams() {
-  return Object.keys(productDetails).map((id) => ({ id }));
+  return Object.keys(productDetails).map((id) => ({ id: id.toString }));
 }
 
-export default function Page({
-  params,
-  searchParams,
-}: {
-  params: { id: string };
-  searchParams: { lang?: string };
-}) {
+// Основной компонент страницы
+
+export default async function ProductPage({ params, searchParams }: PageProps) {
+  // Ожидаем параметры
+  const { id } = await params;
   const lang = ['ENGLISH', 'RUSSIAN', 'GEORGIAN'].includes(
     searchParams.lang || ''
   )
     ? (searchParams.lang as 'ENGLISH' | 'RUSSIAN' | 'GEORGIAN')
     : 'ENGLISH';
 
-  const productId = parseInt(params.id);
+  const productId = parseInt(id);
   const productData = productDetails[productId];
 
   if (!productData) return <div>Product not found</div>;
