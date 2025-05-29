@@ -275,9 +275,10 @@ import { productDetails } from '@/lib/productDetails';
 import ProductDetails from './ProductDetails';
 
 // Тип для параметров маршрута
+// Корректная типизация для Next.js 15
 type PageProps = {
   params: Promise<{ id: string }>;
-  searchParams: { lang?: string };
+  searchParams: Promise<{ lang?: string }>;
 };
 
 // Генерация статических путей
@@ -288,12 +289,13 @@ export async function generateStaticParams() {
 // Основной компонент страницы
 
 export default async function ProductPage({ params, searchParams }: PageProps) {
-  // Ожидаем параметры
+  // Ожидаем параметры, Ожидаем разрешения Promise
   const { id } = await params;
-  const lang = ['ENGLISH', 'RUSSIAN', 'GEORGIAN'].includes(
-    searchParams.lang || ''
-  )
-    ? (searchParams.lang as 'ENGLISH' | 'RUSSIAN' | 'GEORGIAN')
+  const { lang } = await searchParams;
+
+  // Валидация языка
+  const validLang = ['ENGLISH', 'RUSSIAN', 'GEORGIAN'].includes(lang || '')
+    ? (lang as 'ENGLISH' | 'RUSSIAN' | 'GEORGIAN')
     : 'ENGLISH';
 
   const productId = parseInt(id);
@@ -304,7 +306,7 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
   return (
     <ProductDetails
       productId={productId}
-      lang={lang}
+      lang={validLang}
       productData={productData}
     />
   );
