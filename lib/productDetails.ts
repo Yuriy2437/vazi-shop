@@ -1,10 +1,16 @@
-type Language = 'ENGLISH' | 'RUSSIAN' | 'GEORGIAN';
+import type { Language } from './types';
 
-export type ProductDetails = {
-  descriptions: Record<Language, string>;
-};
+// export type ProductDetails = {
+//   descriptions: Record<Language, string>;
+// };
 
-export const productDetails: Record<number, ProductDetails> = {
+// export const productDetails: Record<number, ProductDetails> = {
+export const productDetails: Record<
+  number,
+  {
+    descriptions: Record<Language, string>;
+  }
+> = {
   1: {
     descriptions: {
       ENGLISH: 'Brooch made of felt, wool and threads',
