@@ -271,34 +271,74 @@
 // }
 
 // Серверный компонент
-import { productDetails } from '@/lib/productDetails';
-import ProductDetails from './ProductDetails';
+// import { productDetails } from '@/lib/productDetails';
+// import ProductDetails from './ProductDetails';
 
 // Тип для параметров маршрута
 // Корректная типизация для Next.js 15
-type PageProps = {
-  params: Promise<{ id: string }>;
-  searchParams: Promise<{ lang?: string }>;
-};
+// type PageProps = {
+//   params: Promise<{ id: string }>;
+//   searchParams: Promise<{ lang?: string }>;
+// };
 
 // Генерация статических путей
-export async function generateStaticParams() {
-  return Object.keys(productDetails).map((id) => ({ id: id.toString }));
-}
+// export async function generateStaticParams() {
+//   return Object.keys(productDetails).map((id) => ({ id: id.toString }));
+// }
 
 // Основной компонент страницы
 
-export default async function ProductPage({ params, searchParams }: PageProps) {
-  // Ожидаем параметры, Ожидаем разрешения Promise
-  const { id } = await params;
-  const { lang } = await searchParams;
+// export default async function ProductPage({ params, searchParams }: PageProps) {
+//   // Ожидаем параметры, Ожидаем разрешения Promise
+//   const { id } = await params;
+//   const { lang } = await searchParams;
 
-  // Валидация языка
-  const validLang = ['ENGLISH', 'RUSSIAN', 'GEORGIAN'].includes(lang || '')
-    ? (lang as 'ENGLISH' | 'RUSSIAN' | 'GEORGIAN')
+//   // Валидация языка
+//   const validLang = ['ENGLISH', 'RUSSIAN', 'GEORGIAN'].includes(lang || '')
+//     ? (lang as 'ENGLISH' | 'RUSSIAN' | 'GEORGIAN')
+//     : 'ENGLISH';
+
+//   const productId = parseInt(id);
+//   const productData = productDetails[productId];
+
+//   if (!productData) return <div>Product not found</div>;
+
+//   return (
+//     <ProductDetails
+//       productId={productId}
+//       lang={validLang}
+//       productData={productData}
+//     />
+//   );
+// }
+
+import { productDetails } from '@/lib/productDetails';
+import ProductDetails from './ProductDetails';
+import type { Language } from '@/lib/types';
+
+export async function generateStaticParams() {
+  return Object.keys(productDetails).map((id) => ({
+    id: id.toString(), // Явное преобразование в строку
+  }));
+}
+
+export default function Page({
+  params,
+  searchParams,
+}: {
+  params: { id: string }; // Убрана обёртка Promise
+  searchParams: { lang?: string }; // Типизируем параметры
+}) {
+  const productId = parseInt(params.id);
+
+  // Валидация и приведение типа языка
+  const validLanguages: Language[] = ['ENGLISH', 'RUSSIAN', 'GEORGIAN'];
+  const lang = validLanguages.includes(
+    searchParams.lang?.toUpperCase() as Language
+  )
+    ? (searchParams.lang?.toUpperCase() as Language)
     : 'ENGLISH';
 
-  const productId = parseInt(id);
   const productData = productDetails[productId];
 
   if (!productData) return <div>Product not found</div>;
@@ -306,7 +346,7 @@ export default async function ProductPage({ params, searchParams }: PageProps) {
   return (
     <ProductDetails
       productId={productId}
-      lang={validLang}
+      lang={lang}
       productData={productData}
     />
   );
