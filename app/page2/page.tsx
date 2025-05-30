@@ -129,11 +129,66 @@
 //   );
 // }
 
-import { Suspense } from 'react';
+// import { Suspense } from 'react';
+// import Image from 'next/image';
+// import styles from '../styles/page2.module.css';
+
+// // Клиентский компонент с интерактивностью
+// function PageContent({ lang }: { lang: string }) {
+//   const buttonTexts = {
+//     ENGLISH: ['SOUVENIRS OF MASTER EUGENIA', 'SOUVENIRS OF MASTER PAUL'],
+//     RUSSIAN: ['СУВЕНИРЫ МАСТЕРА ЕВГЕНИИ', 'СУВЕНИРЫ МАСТЕРА ПАВЛА'],
+//     GEORGIAN: [
+//       'ოსტატ ევგენიას სუვენირები'.toUpperCase(),
+//       'ოსტატ პაველის სუვენირები'.toUpperCase(),
+//     ],
+//   };
+
+//   return (
+//     <main className={styles.container}>
+//       <Image
+//         src='/page2.jpeg'
+//         alt='Background'
+//         fill
+//         priority
+//         className={styles.background}
+//         sizes='(max-width: 768px) 100vw, 50vw'
+//       />
+
+//       <div className={styles.buttonContainer}>
+//         <a href={`/eugenia-works?lang=${lang}`} className={styles.masterBtn}>
+//           {buttonTexts[lang as keyof typeof buttonTexts][0]}
+//         </a>
+//         <a href={`/paul-works?lang=${lang}`} className={styles.masterBtn}>
+//           {buttonTexts[lang as keyof typeof buttonTexts][1]}
+//         </a>
+//       </div>
+//     </main>
+//   );
+// }
+
+// // Основная серверная страница
+// export default function Page({
+//   searchParams,
+// }: {
+//   searchParams: Promise<{ lang?: string }> // Указываем Promise тип
+// }) {
+//     // Ожидаем разрешения Promise
+//   const { lang } = await searchParams;
+//   const validLanguages = ['ENGLISH', 'RUSSIAN', 'GEORGIAN'];
+//   const validLang = validLanguages.includes(lang?.toUpperCase() || '')
+//     ? lang!.toUpperCase() as 'ENGLISH' | 'RUSSIAN' | 'GEORGIAN'
+//     : 'ENGLISH'
+
+//   return (
+//     <PageContent lang={validLang} />
+//   )
+// }
+
 import Image from 'next/image';
 import styles from '../styles/page2.module.css';
 
-// Клиентский компонент с интерактивностью
+// Клиентский компонент
 function PageContent({ lang }: { lang: string }) {
   const buttonTexts = {
     ENGLISH: ['SOUVENIRS OF MASTER EUGENIA', 'SOUVENIRS OF MASTER PAUL'],
@@ -167,20 +222,21 @@ function PageContent({ lang }: { lang: string }) {
   );
 }
 
-// Основная серверная страница
-export default function Page({
+// Серверный компонент
+export default async function Page({
   searchParams,
 }: {
-  searchParams: { lang?: string };
+  searchParams: Promise<{ lang?: string }>;
 }) {
-  const validLanguages = ['ENGLISH', 'RUSSIAN', 'GEORGIAN'];
-  const lang = validLanguages.includes(searchParams.lang?.toUpperCase() ?? '')
-    ? searchParams.lang!.toUpperCase()
+  // Ожидаем параметры
+  const { lang } = await searchParams;
+
+  // Валидация языка
+  const validLang = ['ENGLISH', 'RUSSIAN', 'GEORGIAN'].includes(
+    lang?.toUpperCase() || ''
+  )
+    ? lang!.toUpperCase()
     : 'ENGLISH';
 
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <PageContent lang={lang} />
-    </Suspense>
-  );
+  return <PageContent lang={validLang} />;
 }
