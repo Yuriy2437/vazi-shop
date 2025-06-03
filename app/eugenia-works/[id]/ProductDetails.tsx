@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import styles from '../../styles/product.module.css';
-// import type { Language } from '@/lib/types';
 import type { Language } from '../types';
 
 interface Props {
