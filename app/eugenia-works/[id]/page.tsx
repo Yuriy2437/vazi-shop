@@ -1,6 +1,8 @@
-import { productDetails } from '@/lib/productDetails';
+// import { productDetails } from '@/lib/productDetails';
+import { productDetails } from '../productDetails';
+import type { Language } from '../types';
 import ProductDetails from './ProductDetails';
-import type { Language } from '@/lib/types';
+// import type { Language } from '@/lib/types';
 
 export async function generateStaticParams() {
   return Object.keys(productDetails).map((id) => ({
