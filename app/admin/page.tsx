@@ -261,7 +261,11 @@ export default function AdminPage() {
                 />
                 <span>
                   {isCard ? (
-                    order.paid
+                    order.paid === 'YES' ? (
+                      'YES'
+                    ) : (
+                      'NO'
+                    )
                   ) : (
                     <select
                       value={order.paid}
