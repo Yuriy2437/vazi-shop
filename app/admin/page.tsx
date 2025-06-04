@@ -261,13 +261,13 @@ export default function AdminPage() {
                 />
                 <span>
                   {isCard ? (
-                    order.paid === 'NO'
+                    // Для карт отображаем только NO или YES, но не даём менять вручную
+                    order.paid === 'YES' ? (
+                      'YES'
+                    ) : (
+                      'NO'
+                    )
                   ) : (
-                    // ? (
-                    //   'YES'
-                    // ) : (
-                    //   'NO'
-                    // )
                     <select
                       value={order.paid}
                       onChange={(e) =>
