@@ -323,9 +323,9 @@ export const productDetails: Record<
   },
   43: {
     descriptions: {
-      ENGLISH: '',
-      RUSSIAN: '',
-      GEORGIAN: '',
+      ENGLISH: 'Madonna and Child, size 33x28 cm, material: board, acrylic',
+      RUSSIAN: 'Мадонна и младенец, размер 33х28 см, материал: доска, акрил',
+      GEORGIAN: 'მადონა ყრმასთან ერთად, ზომა 33x28 სმ, მასალა: დაფა, აკრილი',
     },
   },
   44: {
