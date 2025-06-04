@@ -87,9 +87,9 @@
   /* grid-template-columns: 80px 60px 110px 110px 100px 120px 120px 90px 70px 60px; */
   grid-template-columns: 80px 110px 110px 130px 150px 150px 150px 100px 90px 90px;
   align-items: center;
-  font-size: 13px;
+  font-size: 14px;
   /* gap: 1rem; */
-  gap: 2px;
+  gap: 5px;
   padding: 1rem;
   border-bottom: 1px solid #ffd700;
 }
