@@ -261,12 +261,13 @@ export default function AdminPage() {
                 />
                 <span>
                   {isCard ? (
-                    order.paid === 'NO' ? (
-                      'YES'
-                    ) : (
-                      'NO'
-                    )
+                    order.paid === 'NO'
                   ) : (
+                    // ? (
+                    //   'YES'
+                    // ) : (
+                    //   'NO'
+                    // )
                     <select
                       value={order.paid}
                       onChange={(e) =>
