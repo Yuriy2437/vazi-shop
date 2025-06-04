@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import styles from '../styles/gallery.module.css';
+import { useSearchParams } from 'next/navigation';
 
 // Функция определения цены
 const getPrice = (id: number): number | null => {
@@ -29,6 +30,9 @@ const getPrice = (id: number): number | null => {
 };
 
 export default function EugeniaWorksPage() {
+  const searchParams = useSearchParams();
+  const lang = searchParams.get('lang') || 'ENGLISH';
+
   const images = Array.from({ length: 65 }, (_, i) => {
     const id = i + 1;
     return {
@@ -44,7 +48,8 @@ export default function EugeniaWorksPage() {
         {images.map((image) => (
           <a
             key={image.id}
-            href={`/eugenia-works/${image.id}`}
+            href={`/eugenia-works/${image.id}?lang=${lang}`}
+            // href={`/eugenia-works/${image.id}`}
             className={styles.galleryItem}
           >
             <Image

@@ -20,11 +20,17 @@ export default async function Page({
   const { lang } = await searchParams;
 
   // Валидация языка
+  //   const langParam = searchParams.lang?.toUpperCase()
   const validLang: Language = ['ENGLISH', 'RUSSIAN', 'GEORGIAN'].includes(
     lang || ''
   )
     ? (lang as Language)
     : 'ENGLISH';
+
+  //   const validLangs: Language[] = ['ENGLISH', 'RUSSIAN', 'GEORGIAN']
+  //   const lang: Language = validLangs.includes(langParam as Language)
+  //     ? (langParam as Language)
+  //     : 'ENGLISH'
 
   const productId = parseInt(id);
   const productData = productDetails[productId];
