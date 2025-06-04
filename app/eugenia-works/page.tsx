@@ -14,7 +14,7 @@ const getPrice = (id: number): number | null => {
 };
 
 export default function EugeniaWorksPage() {
-  const images = Array.from({ length: 57 }, (_, i) => {
+  const images = Array.from({ length: 65 }, (_, i) => {
     const id = i + 1;
     return {
       id,
