@@ -7,6 +7,7 @@ import styles from '../styles/page.module.css';
 type Order = {
   _id: string;
   image: string;
+  amount: number; // <-- добавлено поле
   name: string;
   address: string;
   phone: string;
@@ -85,6 +86,7 @@ export default function AdminPage() {
       <div className={styles.ordersTable}>
         <div className={styles.tableHeader}>
           <span>Файл</span>
+          <span>Количество</span> {/* <-- новая колонка */}
           <span>Имя</span>
           <span>Адрес</span>
           <span>Телефон</span>
@@ -99,6 +101,7 @@ export default function AdminPage() {
           {orders.map((order) => (
             <div key={order._id} className={styles.tableRow}>
               <span className={styles.breakable}>{order.image}</span>
+              <span>{order.amount}</span> {/* <-- новая колонка */}
               <span className={styles.breakable}>{order.name}</span>
               <span className={styles.breakable}>{order.address}</span>
               <span className={styles.breakable}>{order.phone}</span>

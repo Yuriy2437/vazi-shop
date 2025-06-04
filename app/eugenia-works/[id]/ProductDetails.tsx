@@ -91,6 +91,7 @@ export default function ProductDetails({
         body: JSON.stringify({
           ...formData,
           image: `${productId}.jpg`,
+          amount: 1, // <-- добавлено поле
           payment: `${paymentOptions[lang][methodIndex]} ${currentPrice} GEL`,
           paid: 'NO',
         }),

@@ -2,6 +2,11 @@ import { Schema, model, models } from 'mongoose';
 
 const OrderSchema = new Schema({
   image: { type: String, required: true },
+  amount: {
+    type: Number,
+    default: 1,
+    required: true,
+  },
   name: { type: String, required: true },
   address: { type: String },
   phone: { type: String, required: true },
