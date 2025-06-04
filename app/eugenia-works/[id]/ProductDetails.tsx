@@ -13,9 +13,13 @@ interface Props {
 }
 
 const paymentOptions: Record<Language, string[]> = {
-  ENGLISH: ['Cash to courier', 'Cash in warehouse', 'Pay by card'],
-  RUSSIAN: ['Оплата курьеру', 'Оплата на складе', 'Оплата картой'],
-  GEORGIAN: ['ნაღდი ფული კურიერთან', 'ნაღდი ფული მარაგში', 'ბანკის ბარათით'],
+  ENGLISH: ['Cash to courier', 'Payment by terminal', 'Pay by card'],
+  RUSSIAN: ['Оплата курьеру', 'Оплата по терминалу', 'Оплата картой'],
+  GEORGIAN: [
+    'ნაღდი ფული კურიერთან',
+    'ტერმინალის მეშვეობით გადახდა',
+    'ბანკის ბარათით',
+  ],
 };
 
 export default function ProductDetails({
@@ -77,7 +81,7 @@ export default function ProductDetails({
     });
   };
 
-  const handleSubmit = async (method: string) => {
+  const handleSubmit = async (methodIndex: number) => {
     try {
       const response = await fetch('/api/orders', {
         method: 'POST',
@@ -87,18 +91,22 @@ export default function ProductDetails({
         body: JSON.stringify({
           ...formData,
           image: `${productId}.jpg`,
-          payment: `${
-            paymentOptions[lang][method === 'card' ? 2 : 0]
-          } ${currentPrice} GEL`,
+          payment: `${paymentOptions[lang][methodIndex]} ${currentPrice} GEL`,
           paid: 'NO',
         }),
       });
 
       if (response.ok) {
-        if (method === 'card') {
+        if (methodIndex === 2) {
           setShowPaymentModal(true);
         } else {
-          alert(lang === 'RUSSIAN' ? 'Заказ оформлен!' : 'Order created!');
+          alert(
+            lang === 'RUSSIAN'
+              ? 'Заказ оформлен!'
+              : lang === 'GEORGIAN'
+              ? 'შეკვეთა გაფორმდა!'
+              : 'Order created!'
+          );
         }
         setShowModal(null);
       }
@@ -128,7 +136,11 @@ export default function ProductDetails({
         </h1>
 
         <h2 className={styles.sectionTitle}>
-          {lang === 'RUSSIAN' ? 'Стоимость: ' : 'Price: '}
+          {lang === 'RUSSIAN'
+            ? 'Стоимость: '
+            : lang === 'GEORGIAN'
+            ? 'ფასი: '
+            : 'Price: '}
           <span className={styles.price}>{currentPrice} GEL</span>
         </h2>
 
@@ -148,7 +160,13 @@ export default function ProductDetails({
         {showModal && (
           <div className={styles.modalOverlay}>
             <div className={styles.modal}>
-              <h2>{lang === 'RUSSIAN' ? 'Ваше имя:' : 'Your name:'}</h2>
+              <h2>
+                {lang === 'RUSSIAN'
+                  ? 'Ваше имя:'
+                  : lang === 'GEORGIAN'
+                  ? 'თქვენი სახელი:'
+                  : 'Your name:'}
+              </h2>
               <input
                 type='text'
                 name='name'
@@ -157,27 +175,26 @@ export default function ProductDetails({
               />
 
               <h2>
-                {showModal === paymentOptions[lang][1]
-                  ? lang === 'RUSSIAN'
-                    ? 'Адрес получения:'
-                    : 'Pickup address:'
-                  : lang === 'RUSSIAN'
+                {lang === 'RUSSIAN'
                   ? 'Адрес доставки:'
+                  : lang === 'GEORGIAN'
+                  ? 'მიწოდების მისამართი:'
                   : 'Delivery address:'}
               </h2>
+              <input
+                type='text'
+                name='address'
+                maxLength={30}
+                onChange={handleInputChange}
+              />
 
-              {showModal === paymentOptions[lang][1] ? (
-                <div className={styles.pickupAddress}>90, Besraion Zhgenti</div>
-              ) : (
-                <input
-                  type='text'
-                  name='address'
-                  maxLength={30}
-                  onChange={handleInputChange}
-                />
-              )}
-
-              <h2>{lang === 'RUSSIAN' ? 'Ваш телефон:' : 'Your phone:'}</h2>
+              <h2>
+                {lang === 'RUSSIAN'
+                  ? 'Ваш телефон:'
+                  : lang === 'GEORGIAN'
+                  ? 'თქვენი ტელეფონი:'
+                  : 'Your phone:'}
+              </h2>
               <input
                 type='tel'
                 name='phone'
@@ -188,6 +205,8 @@ export default function ProductDetails({
               <h2>
                 {lang === 'RUSSIAN'
                   ? 'Ваш мэйл/телеграм:'
+                  : lang === 'GEORGIAN'
+                  ? 'თქვენი ელფოსტა/ტელეგრამი:'
                   : 'Your email/telegram:'}
               </h2>
               <input
@@ -200,12 +219,14 @@ export default function ProductDetails({
               <button
                 className={styles.submitButton}
                 onClick={() =>
-                  handleSubmit(
-                    paymentOptions[lang].indexOf(showModal).toString()
-                  )
+                  handleSubmit(paymentOptions[lang].indexOf(showModal))
                 }
               >
-                {lang === 'RUSSIAN' ? 'Оформить заказ' : 'Place Order'}
+                {lang === 'RUSSIAN'
+                  ? 'Оформить заказ'
+                  : lang === 'GEORGIAN'
+                  ? 'შეკვეთის დადასტურება'
+                  : 'Place Order'}
               </button>
             </div>
           </div>
@@ -218,7 +239,11 @@ export default function ProductDetails({
                 className={styles.paymentButton}
                 onClick={() => setShowPaymentModal(false)}
               >
-                {lang === 'RUSSIAN' ? 'ОПЛАТИТЬ КАРТОЙ' : 'PAY BY CARD'}
+                {lang === 'RUSSIAN'
+                  ? 'ОПЛАТИТЬ КАРТОЙ'
+                  : lang === 'GEORGIAN'
+                  ? 'ბარათით გადახდა'
+                  : 'PAY BY CARD'}
               </button>
             </div>
           </div>
