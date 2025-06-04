@@ -87,7 +87,7 @@
   /* grid-template-columns: 80px 60px 110px 110px 100px 120px 120px 90px 70px 60px; */
   grid-template-columns: 80px 110px 110px 130px 150px 150px 150px 100px 90px 90px;
   align-items: center;
-  font-size: 18px;
+  font-size: 15px;
   /* gap: 1rem; */
   gap: 5px;
   padding: 1rem;
@@ -123,11 +123,11 @@
   word-break: break-all;
   max-width: 110px;
   white-space: normal;
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .statusSelect {
-  font-size: 13px;
+  font-size: 15px;
   padding: 2px 4px;
   width: 60px;
 }
