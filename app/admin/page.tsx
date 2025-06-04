@@ -21,48 +21,62 @@ export default function AdminPage() {
   const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
 
-  // Все хуки должны быть ВЫШЕ условных операторов
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/auth/signin');
+    } else if (status === 'authenticated') {
+      fetchOrders();
     }
-    // Загрузка данных только для авторизованных
-    else if (status === 'authenticated') {
-      fetch('/api/orders')
-        .then((res) => res.json())
-        .then((data) => setOrders(data));
+  }, [status, router]);
+
+  const fetchOrders = async () => {
+    try {
+      const res = await fetch('/api/orders');
+      const data = await res.json();
+      setOrders(data);
+    } catch (error) {
+      console.error('Error fetching orders:', error);
     }
-  }, [status, router]); // Добавлен status в зависимости
+  };
+
+  const handleStatusChange = async (id: string, newStatus: string) => {
+    try {
+      const res = await fetch(`/api/orders/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paid: newStatus }),
+      });
+
+      if (res.ok) {
+        setOrders(
+          orders.map((order) =>
+            order._id === id ? { ...order, paid: newStatus } : order
+          )
+        );
+      }
+    } catch (error) {
+      console.error('Update error:', error);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await fetch(`/api/orders/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        setOrders(orders.filter((order) => order._id !== id));
+      }
+    } catch (error) {
+      console.error('Delete error:', error);
+    }
+  };
 
   if (status === 'loading') {
     return <div className={styles.loading}>Загрузка...</div>;
   }
 
   if (!session) {
-    return null; // или сообщение о необходимости входа
+    return null;
   }
-
-  const handleDelete = async (id: string) => {
-    try {
-      const response = await fetch(`/api/orders/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || 'Failed to delete');
-      }
-
-      setOrders(orders.filter((order) => order._id !== id));
-    } catch (error) {
-      console.error('Delete error:', error);
-      alert(error instanceof Error ? error.message : 'Failed to delete order');
-    }
-  };
 
   return (
     <div className={styles.adminContainer}>
@@ -84,13 +98,28 @@ export default function AdminPage() {
         <div className={styles.tableBody}>
           {orders.map((order) => (
             <div key={order._id} className={styles.tableRow}>
-              <span>{order.image}</span>
-              <span>{order.name}</span>
-              <span>{order.address}</span>
-              <span>{order.phone}</span>
-              <span>{order.mail}</span>
-              <span>{order.payment}</span>
-              <span>{order.paid}</span>
+              <span className={styles.breakable}>{order.image}</span>
+              <span className={styles.breakable}>{order.name}</span>
+              <span className={styles.breakable}>{order.address}</span>
+              <span className={styles.breakable}>{order.phone}</span>
+              <span className={styles.breakable}>{order.mail}</span>
+              <span className={styles.breakable}>{order.payment}</span>
+              <span>
+                {order.payment.toLowerCase().includes('card') ? (
+                  order.paid
+                ) : (
+                  <select
+                    value={order.paid}
+                    onChange={(e) =>
+                      handleStatusChange(order._id, e.target.value)
+                    }
+                    className={styles.statusSelect}
+                  >
+                    <option value='NO'>NO</option>
+                    <option value='YES'>YES</option>
+                  </select>
+                )}
+              </span>
               <span>{new Date(order.createdAt).toLocaleDateString()}</span>
               <button
                 className={styles.deleteButton}
