@@ -4,6 +4,9 @@ import Image from 'next/image';
 import styles from '../../styles/product.module.css';
 import type { Language } from '../types';
 
+// Добавьте константу цены ВНЕ компонента
+const CARD_PRICE = 7;
+
 interface Props {
   productId: number;
   lang: Language;
@@ -34,54 +37,20 @@ export default function ProductDetails({
     address: '',
     phone: '',
     mail: '',
+    amount: 1,
   });
 
-  // Функция определения цены
-  const getPrice = (id: number): number | null => {
-    const priceMap: Record<string, number> = {
-      '1-15': 48,
-      '16-24': 134,
-      '25-27': 206,
-      '28-32': 165,
-      '33': 134,
-      '34-37': 165,
-      '38-40': 134,
-      '41-44': 268,
-      '45': 165,
-      '46': 206,
-      '47-48': 412,
-      '49': 335,
-      '50': 310,
-      '51-52': 330,
-      '53-54': 310,
-      '55': 268,
-      '56': 412,
-      '57': 206,
-      '58-61': 268,
-      '62-63': 94,
-      '64': 165,
-      '65': 268,
-    };
-
-    for (const range in priceMap) {
-      const [min, max] = range.split('-').map(Number);
-      if ((max && id >= min && id <= max) || id === min) {
-        return priceMap[range];
-      }
-    }
-    return null;
-  };
-
-  const currentPrice = getPrice(productId);
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: name === 'amount' ? Math.max(1, parseInt(value) || 1) : value,
     });
   };
 
   const handleSubmit = async (methodIndex: number) => {
+    // Определяем расширение файла
+    const ext = productId <= 3 ? '.jpg' : '.png';
     try {
       const response = await fetch('/api/orders', {
         method: 'POST',
@@ -90,9 +59,11 @@ export default function ProductDetails({
         },
         body: JSON.stringify({
           ...formData,
-          image: `${productId}.jpg`,
-          amount: 1, // <-- добавлено поле
-          payment: `${paymentOptions[lang][methodIndex]} ${currentPrice} GEL`,
+          image: `k${productId}${ext}`,
+          amount: formData.amount,
+          payment: `${paymentOptions[lang][methodIndex]} ${
+            CARD_PRICE * Number(formData.amount)
+          } GEL`,
           paid: 'NO',
         }),
       });
@@ -116,12 +87,15 @@ export default function ProductDetails({
     }
   };
 
+  // Определяем расширение файла
+  const ext = productId <= 3 ? '.jpg' : '.png';
+
   return (
     <div className={styles.container}>
       <div className={styles.imageSection}>
         <Image
-          src={`/images/eugenia/${productId}.jpg`}
-          alt={`Product ${productId}`}
+          src={`/images/cards/k${productId}${ext}`}
+          alt={`Card ${productId}`}
           width={800}
           height={800}
           className={styles.productImage}
@@ -142,7 +116,7 @@ export default function ProductDetails({
             : lang === 'GEORGIAN'
             ? 'ფასი: '
             : 'Price: '}
-          <span className={styles.price}>{currentPrice} GEL</span>
+          <span className={styles.price}>{CARD_PRICE} GEL</span>
         </h2>
 
         <div className={styles.optionsContainer}>
@@ -173,6 +147,7 @@ export default function ProductDetails({
                 name='name'
                 maxLength={20}
                 onChange={handleInputChange}
+                value={formData.name}
               />
 
               <h2>
@@ -187,6 +162,7 @@ export default function ProductDetails({
                 name='address'
                 maxLength={30}
                 onChange={handleInputChange}
+                value={formData.address}
               />
 
               <h2>
@@ -201,6 +177,7 @@ export default function ProductDetails({
                 name='phone'
                 maxLength={20}
                 onChange={handleInputChange}
+                value={formData.phone}
               />
 
               <h2>
@@ -215,6 +192,24 @@ export default function ProductDetails({
                 name='mail'
                 maxLength={30}
                 onChange={handleInputChange}
+                value={formData.mail}
+              />
+
+              <h2>
+                {lang === 'RUSSIAN'
+                  ? 'Количество:'
+                  : lang === 'GEORGIAN'
+                  ? 'რაოდენობა:'
+                  : 'Amount:'}
+              </h2>
+              <input
+                type='number'
+                name='amount'
+                min={1}
+                max={999}
+                value={formData.amount}
+                onChange={handleInputChange}
+                style={{ width: '60px' }}
               />
 
               <button

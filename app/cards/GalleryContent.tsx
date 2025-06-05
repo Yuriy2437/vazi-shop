@@ -3,41 +3,20 @@
 import Image from 'next/image';
 import styles from '../styles/gallery.module.css';
 
-const getPrice = (id: number): number | null => {
-  if (id >= 1 && id <= 15) return 48;
-  if (id >= 16 && id <= 24) return 134;
-  if (id >= 25 && id <= 27) return 206;
-  if (id >= 28 && id <= 32) return 165;
-  if (id === 33) return 134;
-  if (id >= 34 && id <= 37) return 165;
-  if (id >= 38 && id <= 40) return 134;
-  if (id >= 41 && id <= 44) return 268;
-  if (id === 45) return 165;
-  if (id === 46) return 206;
-  if (id >= 47 && id <= 48) return 412;
-  if (id === 49) return 335;
-  if (id === 50) return 310;
-  if (id >= 51 && id <= 52) return 330;
-  if (id >= 53 && id <= 54) return 310;
-  if (id === 55) return 268;
-  if (id === 56) return 412;
-  if (id === 57) return 206;
-  if (id >= 58 && id <= 61) return 268;
-  if (id >= 62 && id <= 63) return 94;
-  if (id === 64) return 165;
-  if (id === 65) return 268;
-  return null;
-};
+const CARD_PRICE = 7;
 
 export default function GalleryContent({ lang }: { lang: string }) {
-  const images = Array.from({ length: 65 }, (_, i) => {
-    const id = i + 1;
-    return {
-      id,
-      src: `/images/eugenia/${id}.jpg`,
-      price: getPrice(id),
-    };
-  });
+  // Первые 3 — jpg, остальные — png
+  const images = [
+    ...Array.from({ length: 3 }, (_, i) => ({
+      id: i + 1,
+      src: `/images/cards/k${i + 1}.jpg`,
+    })),
+    ...Array.from({ length: 42 }, (_, i) => ({
+      id: i + 4,
+      src: `/images/cards/k${i + 4}.png`,
+    })),
+  ];
 
   return (
     <div className={styles.galleryContainer}>
@@ -45,20 +24,18 @@ export default function GalleryContent({ lang }: { lang: string }) {
         {images.map((image) => (
           <a
             key={image.id}
-            href={`/eugenia-works/${image.id}?lang=${lang}`}
+            href={`/cards/${image.id}?lang=${lang}`}
             className={styles.galleryItem}
           >
             <Image
               src={image.src}
-              alt={`Work ${image.id}`}
+              alt={`Card ${image.id}`}
               width={400}
               height={400}
               className={styles.image}
               loading='lazy'
             />
-            {image.price !== null && (
-              <div className={styles.priceBadge}>{image.price} GEL</div>
-            )}
+            <div className={styles.priceBadge}>{CARD_PRICE} GEL</div>
           </a>
         ))}
       </div>

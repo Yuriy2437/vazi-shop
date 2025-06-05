@@ -3,8 +3,8 @@ import type { Language } from '../types';
 import ProductDetails from './ProductDetails';
 
 export async function generateStaticParams() {
-  return Object.keys(productDetails).map((id) => ({
-    id: id.toString(),
+  return Array.from({ length: 45 }, (_, i) => ({
+    id: (i + 1).toString(),
   }));
 }
 
@@ -15,11 +15,9 @@ export default async function Page({
   params: Promise<{ id: string }>;
   searchParams: Promise<{ lang?: string }>;
 }) {
-  // Ожидаем разрешения Promise
   const { id } = await params;
   const { lang } = await searchParams;
 
-  // Валидация языка
   const langUpper = lang?.toUpperCase() ?? 'ENGLISH';
   const validLang: Language = ['ENGLISH', 'RUSSIAN', 'GEORGIAN'].includes(
     langUpper
@@ -27,10 +25,10 @@ export default async function Page({
     ? (langUpper as Language)
     : 'ENGLISH';
 
-  const productId = parseInt(id);
+  const productId = parseInt(id, 10);
   const productData = productDetails[productId];
 
-  if (!productData) return <div>Product not found</div>;
+  if (!productData) return <div>Card not found</div>;
 
   return (
     <ProductDetails
