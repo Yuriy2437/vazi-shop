@@ -82,7 +82,7 @@ export default function AdminPage() {
           <span>Имя</span>
           <span>Адрес</span>
           <span>Телефон</span>
-          <span>Мэйл</span>
+          <span>Мэйл, Телеграм</span>
           <span>Оплата</span> {/* Здесь уже итоговая сумма */}
           <span>Оплачено</span>
           <span>Дата</span>
@@ -94,11 +94,6 @@ export default function AdminPage() {
             // Убрали парсинг суммы — используем payment как есть
             const isCard = /(card|картой|ბარათით)/i.test(order.payment);
 
-            // const paymentText = order.payment.replace(
-            //   /(\d+)\s(GEL)/,
-            //   '$1\u00A0$2'
-            // );
-
             return (
               <div key={order._id} className={styles.tableRow}>
                 <span className={styles.breakable}>{order.image}</span>
@@ -106,13 +101,10 @@ export default function AdminPage() {
                 <span className={styles.breakable}>{order.name}</span>
                 <span className={styles.breakable}>{order.address}</span>
                 <span className={styles.breakable}>{order.phone}</span>
-                <span className={styles.breakable}>{order.mail}</span>
-                {/* Выводим payment без изменений */}
-                {/* <span className={styles.breakable}>{order.payment}</span> */}
-                {/* <span
-                  className={`${styles.breakable} ${styles.noWrap}`}
-                  dangerouslySetInnerHTML={{ __html: paymentText }}
-                /> */}
+                {/* <span className={styles.breakable}>{order.mail}</span> */}
+                <span className={`${styles.breakable} ${styles.mailCell}`}>
+                  {order.mail}
+                </span>
                 <span className={styles.paymentCell}>{order.payment}</span>
                 <span>
                   {isCard ? (
