@@ -82,7 +82,7 @@ export default function AdminPage() {
           <span>Имя</span>
           <span>Адрес</span>
           <span>Телефон</span>
-          <span>Мэйл, Телеграм</span>
+          <span>Мэйл</span>
           <span>Оплата</span> {/* Здесь уже итоговая сумма */}
           <span>Оплачено</span>
           <span>Дата</span>

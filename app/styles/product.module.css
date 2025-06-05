@@ -196,7 +196,6 @@
 }
 
 /* Для переноса длинных email/telegram */
-.modal input[name='mail'],
-input[name='mail'] {
+.mailInput {
   word-break: break-all;
 }

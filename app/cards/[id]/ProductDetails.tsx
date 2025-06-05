@@ -192,6 +192,7 @@ export default function ProductDetails({
                 name='mail'
                 maxLength={30}
                 onChange={handleInputChange}
+                className={styles.mailInput}
                 value={formData.mail}
               />
 
