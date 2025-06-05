@@ -4,10 +4,22 @@ import styles from '../styles/page2.module.css';
 // Клиентский компонент
 function PageContent({ lang }: { lang: string }) {
   const buttonTexts = {
-    ENGLISH: ['SOUVENIRS OF MASTER EUGENIA', 'SOUVENIRS OF MASTER PAUL'],
-    RUSSIAN: ['СУВЕНИРЫ МАСТЕРА ЕВГЕНИИ', 'СУВЕНИРЫ МАСТЕРА ПАВЛА'],
+    ENGLISH: [
+      'SOUVENIRS OF MASTER EUGENIA',
+      'POSTCARDS',
+      'CHRISTIAN POSTCARDS',
+      'SOUVENIRS OF MASTER PAUL',
+    ],
+    RUSSIAN: [
+      'СУВЕНИРЫ МАСТЕРА ЕВГЕНИИ',
+      'ОТКРЫТКИ',
+      'ХРИСТИАНСКИЕ ОТКРЫТКИ',
+      'СУВЕНИРЫ МАСТЕРА ПАВЛА',
+    ],
     GEORGIAN: [
       'ოსტატ ევგენიას სუვენირები'.toUpperCase(),
+      'საფოსტო ბარათები'.toUpperCase(),
+      'ქრისტიანული ბარათები'.toUpperCase(),
       'ოსტატ პაველის სუვენირები'.toUpperCase(),
     ],
   };
