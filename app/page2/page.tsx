@@ -39,8 +39,17 @@ function PageContent({ lang }: { lang: string }) {
         <a href={`/eugenia-works?lang=${lang}`} className={styles.masterBtn}>
           {buttonTexts[lang as keyof typeof buttonTexts][0]}
         </a>
-        <a href={`/paul-works?lang=${lang}`} className={styles.masterBtn}>
+        <a href={`/postcards?lang=${lang}`} className={styles.masterBtn}>
           {buttonTexts[lang as keyof typeof buttonTexts][1]}
+        </a>
+        <a
+          href={`/christian-postcards?lang=${lang}`}
+          className={styles.masterBtn}
+        >
+          {buttonTexts[lang as keyof typeof buttonTexts][2]}
+        </a>
+        <a href={`/paul-works?lang=${lang}`} className={styles.masterBtn}>
+          {buttonTexts[lang as keyof typeof buttonTexts][3]}
         </a>
       </div>
     </main>
