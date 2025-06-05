@@ -1,34 +1,3 @@
-// import type { Language } from './types';
-
-// export const productDetails: Record<
-//   number,
-//   {
-//     descriptions: Record<Language, string>;
-//   }
-// > = {
-//   1: {
-//     descriptions: {
-//       ENGLISH:
-//         'Postcard by the author Evgeniya, A5 format, several copies can be ordered',
-//       RUSSIAN:
-//         'Открытка авторская мастера Евгении, формат А5, можно заказать несколько экземпляров',
-//       GEORGIAN:
-//         'საფოსტო ბარათი ავტორის, ევგენიას მიერ, A5 ფორმატი, შესაძლებელია რამდენიმე ეგზემპლარის შეკვეთა',
-//     },
-//   },
-
-//   2: {
-//     descriptions: {
-//       ENGLISH:
-//         'Postcard by the author Evgeniya, A5 format, several copies can be ordered',
-//       RUSSIAN:
-//         'Открытка авторская мастера Евгении, формат А5, можно заказать несколько экземпляров',
-//       GEORGIAN:
-//         'საფოსტო ბარათი ავტორის, ევგენიას მიერ, A5 ფორმატი, შესაძლებელია რამდენიმე ეგზემპლარის შეკვეთა',
-//     },
-//   },
-// };
-
 import type { Language } from './types';
 
 // Общее описание для всех открыток

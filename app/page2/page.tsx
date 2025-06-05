@@ -42,10 +42,7 @@ function PageContent({ lang }: { lang: string }) {
         <a href={`/cards?lang=${lang}`} className={styles.masterBtn}>
           {buttonTexts[lang as keyof typeof buttonTexts][1]}
         </a>
-        <a
-          href={`/christian-postcards?lang=${lang}`}
-          className={styles.masterBtn}
-        >
+        <a href={`/christian-cards?lang=${lang}`} className={styles.masterBtn}>
           {buttonTexts[lang as keyof typeof buttonTexts][2]}
         </a>
         <a href={`/paul-works?lang=${lang}`} className={styles.masterBtn}>
