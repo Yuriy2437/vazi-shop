@@ -7,7 +7,7 @@
 // type Order = {
 //   _id: string;
 //   image: string;
-//   amount: number; // <-- добавлено поле
+//   amount: number;
 //   name: string;
 //   address: string;
 //   phone: string;
@@ -26,19 +26,11 @@
 //     if (status === 'unauthenticated') {
 //       router.push('/auth/signin');
 //     } else if (status === 'authenticated') {
-//       fetchOrders();
+//       fetch('/api/orders')
+//         .then((res) => res.json())
+//         .then((data) => setOrders(data));
 //     }
 //   }, [status, router]);
-
-//   const fetchOrders = async () => {
-//     try {
-//       const res = await fetch('/api/orders');
-//       const data = await res.json();
-//       setOrders(data);
-//     } catch (error) {
-//       console.error('Error fetching orders:', error);
-//     }
-//   };
 
 //   const handleStatusChange = async (id: string, newStatus: string) => {
 //     try {
@@ -86,7 +78,7 @@
 //       <div className={styles.ordersTable}>
 //         <div className={styles.tableHeader}>
 //           <span>Файл</span>
-//           <span>Cколько</span> {/* <-- новая колонка */}
+//           <span>Количество</span>
 //           <span>Имя</span>
 //           <span>Адрес</span>
 //           <span>Телефон</span>
@@ -98,40 +90,66 @@
 //         </div>
 
 //         <div className={styles.tableBody}>
-//           {orders.map((order) => (
-//             <div key={order._id} className={styles.tableRow}>
-//               <span className={styles.breakable}>{order.image}</span>
-//               <span>{order.amount}</span> {/* <-- новая колонка */}
-//               <span className={styles.breakable}>{order.name}</span>
-//               <span className={styles.breakable}>{order.address}</span>
-//               <span className={styles.breakable}>{order.phone}</span>
-//               <span className={styles.breakable}>{order.mail}</span>
-//               <span className={styles.breakable}>{order.payment}</span>
-//               <span>
-//                 {order.payment.toLowerCase().includes('card') ? (
-//                   order.paid
-//                 ) : (
-//                   <select
-//                     value={order.paid}
-//                     onChange={(e) =>
-//                       handleStatusChange(order._id, e.target.value)
-//                     }
-//                     className={styles.statusSelect}
-//                   >
-//                     <option value='NO'>NO</option>
-//                     <option value='YES'>YES</option>
-//                   </select>
-//                 )}
-//               </span>
-//               <span>{new Date(order.createdAt).toLocaleDateString()}</span>
-//               <button
-//                 className={styles.deleteButton}
-//                 onClick={() => handleDelete(order._id)}
-//               >
-//                 Delete
-//               </button>
-//             </div>
-//           ))}
+//           {orders.map((order) => {
+//             // Парсим сумму из строки оплаты
+//             const amount = order.amount || 1;
+//             const priceMatch = order.payment.match(/(\d+)\s*GEL/);
+//             const price = priceMatch ? parseInt(priceMatch[1], 10) : 0;
+//             const total = price * amount;
+
+//             // Формируем строку оплаты с итоговой суммой и неразрывным пробелом
+//             const paymentText = order.payment.replace(
+//               /(\d+)\s*GEL/,
+//               `<span class="${styles.noWrap}">${total}&nbsp;GEL</span>`
+//             );
+
+//             // Проверка на оплату картой (на любом языке)
+//             const isCard = /(card|картой|ბარათით)/i.test(order.payment);
+
+//             return (
+//               <div key={order._id} className={styles.tableRow}>
+//                 <span className={styles.breakable}>{order.image}</span>
+//                 <span>{amount}</span>
+//                 <span className={styles.breakable}>{order.name}</span>
+//                 <span className={styles.breakable}>{order.address}</span>
+//                 <span className={styles.breakable}>{order.phone}</span>
+//                 <span className={styles.breakable}>{order.mail}</span>
+//                 {/* Оплата с итоговой суммой и неразрывом числа */}
+//                 <span
+//                   className={styles.breakable}
+//                   dangerouslySetInnerHTML={{ __html: paymentText }}
+//                 />
+//                 <span>
+//                   {isCard ? (
+//                     // Для карт отображаем только NO или YES, но не даём менять вручную
+//                     order.paid === 'YES' ? (
+//                       'YES'
+//                     ) : (
+//                       'NO'
+//                     )
+//                   ) : (
+//                     <select
+//                       value={order.paid}
+//                       onChange={(e) =>
+//                         handleStatusChange(order._id, e.target.value)
+//                       }
+//                       className={styles.statusSelect}
+//                     >
+//                       <option value='NO'>NO</option>
+//                       <option value='YES'>YES</option>
+//                     </select>
+//                   )}
+//                 </span>
+//                 <span>{new Date(order.createdAt).toLocaleDateString()}</span>
+//                 <button
+//                   className={styles.deleteButton}
+//                   onClick={() => handleDelete(order._id)}
+//                 >
+//                   Delete
+//                 </button>
+//               </div>
+//             );
+//           })}
 //         </div>
 //       </div>
 //     </div>
@@ -152,7 +170,7 @@ type Order = {
   address: string;
   phone: string;
   mail: string;
-  payment: string;
+  payment: string; // Уже содержит итоговую сумму (price * amount)
   paid: string;
   createdAt: string;
 };
@@ -223,7 +241,7 @@ export default function AdminPage() {
           <span>Адрес</span>
           <span>Телефон</span>
           <span>Мэйл</span>
-          <span>Оплата</span>
+          <span>Оплата</span> {/* Здесь уже итоговая сумма */}
           <span>Оплачено</span>
           <span>Дата</span>
           <span>Удалить</span>
@@ -231,37 +249,21 @@ export default function AdminPage() {
 
         <div className={styles.tableBody}>
           {orders.map((order) => {
-            // Парсим сумму из строки оплаты
-            const amount = order.amount || 1;
-            const priceMatch = order.payment.match(/(\d+)\s*GEL/);
-            const price = priceMatch ? parseInt(priceMatch[1], 10) : 0;
-            const total = price * amount;
-
-            // Формируем строку оплаты с итоговой суммой и неразрывным пробелом
-            const paymentText = order.payment.replace(
-              /(\d+)\s*GEL/,
-              `<span class="${styles.noWrap}">${total}&nbsp;GEL</span>`
-            );
-
-            // Проверка на оплату картой (на любом языке)
+            // Убрали парсинг суммы — используем payment как есть
             const isCard = /(card|картой|ბარათით)/i.test(order.payment);
 
             return (
               <div key={order._id} className={styles.tableRow}>
                 <span className={styles.breakable}>{order.image}</span>
-                <span>{amount}</span>
+                <span>{order.amount}</span>
                 <span className={styles.breakable}>{order.name}</span>
                 <span className={styles.breakable}>{order.address}</span>
                 <span className={styles.breakable}>{order.phone}</span>
                 <span className={styles.breakable}>{order.mail}</span>
-                {/* Оплата с итоговой суммой и неразрывом числа */}
-                <span
-                  className={styles.breakable}
-                  dangerouslySetInnerHTML={{ __html: paymentText }}
-                />
+                {/* Выводим payment без изменений */}
+                <span className={styles.breakable}>{order.payment}</span>
                 <span>
                   {isCard ? (
-                    // Для карт отображаем только NO или YES, но не даём менять вручную
                     order.paid === 'YES' ? (
                       'YES'
                     ) : (
