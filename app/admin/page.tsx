@@ -78,7 +78,7 @@ export default function AdminPage() {
       <div className={styles.ordersTable}>
         <div className={styles.tableHeader}>
           <span>Файл</span>
-          <span>Количество</span>
+          <span>Объём</span>
           <span>Имя</span>
           <span>Адрес</span>
           <span>Телефон</span>
