@@ -120,7 +120,8 @@
 }
 
 .breakable {
-  word-break: break-all;
+  /* word-break: break-all; */
+  word-break: normal; /* Отключаем принудительный перенос */
   max-width: 110px;
   white-space: normal;
   font-size: 15px;
