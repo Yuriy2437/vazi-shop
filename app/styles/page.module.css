@@ -66,7 +66,6 @@
 
 /* Admin Page */
 .adminContainer {
-  /* padding: 2rem; */
   padding: 16px;
   background-color: #004d40; /* Темно-зеленый фон */
   color: #ffd700; /* Желтый текст */
@@ -83,7 +82,6 @@
 .tableHeader,
 .tableRow {
   display: grid;
-  /* grid-template-columns: 80px 110px 110px 130px 150px 150px 150px 100px 90px 90px; */
   grid-template-columns:
     100px /* Файл */
     50px /* Объём */
@@ -128,7 +126,6 @@
 }
 
 .breakable {
-  /* word-break: break-all; */
   word-break: normal; /* Отключаем принудительный перенос */
   max-width: 110px;
   white-space: normal;
