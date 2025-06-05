@@ -21,6 +21,9 @@
 }
 
 .masterBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: #ff0000;
   color: white;
   border: none;
