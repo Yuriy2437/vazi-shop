@@ -174,3 +174,19 @@
   word-break: break-all; /* Принудительный перенос длинных слов */
   min-width: 150px; /* Фиксированная минимальная ширина */
 }
+
+.languageButtons {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+@media (max-width: 768px) {
+  .languageButtons {
+    flex-direction: column;
+    width: 100%;
+  }
+  .languageButton {
+    width: 100%;
+  }
+}

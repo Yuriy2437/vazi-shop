@@ -1,5 +1,261 @@
+// 'use client';
+// import { useState } from 'react';
+// import Image from 'next/image';
+// import styles from '../../styles/product.module.css';
+// import type { Language } from '../types';
+
+// interface Props {
+//   productId: number;
+//   lang: Language;
+//   productData: {
+//     descriptions: Record<Language, string>;
+//   };
+// }
+
+// const paymentOptions: Record<Language, string[]> = {
+//   ENGLISH: ['Cash to courier', 'Payment by terminal', 'Pay by card'],
+//   RUSSIAN: ['Оплата курьеру', 'Оплата по терминалу', 'Оплата картой'],
+//   GEORGIAN: [
+//     'ნაღდი ფული კურიერთან',
+//     'ტერმინალის მეშვეობით გადახდა',
+//     'ბანკის ბარათით',
+//   ],
+// };
+
+// export default function ProductDetails({
+//   productId,
+//   lang,
+//   productData,
+// }: Props) {
+//   const [showModal, setShowModal] = useState<string | null>(null);
+//   const [showPaymentModal, setShowPaymentModal] = useState(false);
+//   const [formData, setFormData] = useState({
+//     name: '',
+//     address: '',
+//     phone: '',
+//     mail: '',
+//   });
+
+//   // Функция определения цены
+//   const getPrice = (id: number): number | null => {
+//     const priceMap: Record<string, number> = {
+//       '1-15': 48,
+//       '16-24': 134,
+//       '25-27': 206,
+//       '28-32': 165,
+//       '33': 134,
+//       '34-37': 165,
+//       '38-40': 134,
+//       '41-44': 268,
+//       '45': 165,
+//       '46': 206,
+//       '47-48': 412,
+//       '49': 335,
+//       '50': 310,
+//       '51-52': 330,
+//       '53-54': 310,
+//       '55': 268,
+//       '56': 412,
+//       '57': 206,
+//       '58-61': 268,
+//       '62-63': 94,
+//       '64': 165,
+//       '65': 268,
+//     };
+
+//     for (const range in priceMap) {
+//       const [min, max] = range.split('-').map(Number);
+//       if ((max && id >= min && id <= max) || id === min) {
+//         return priceMap[range];
+//       }
+//     }
+//     return null;
+//   };
+
+//   const currentPrice = getPrice(productId);
+
+//   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     setFormData({
+//       ...formData,
+//       [e.target.name]: e.target.value,
+//     });
+//   };
+
+//   const handleSubmit = async (methodIndex: number) => {
+//     try {
+//       const response = await fetch('/api/orders', {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({
+//           ...formData,
+//           image: `${productId}.jpg`,
+//           amount: 1, // <-- добавлено поле
+//           payment: `${paymentOptions[lang][methodIndex]} ${currentPrice} GEL`,
+//           paid: 'NO',
+//         }),
+//       });
+
+//       if (response.ok) {
+//         if (methodIndex === 2) {
+//           setShowPaymentModal(true);
+//         } else {
+//           alert(
+//             lang === 'RUSSIAN'
+//               ? 'Заказ оформлен!'
+//               : lang === 'GEORGIAN'
+//               ? 'შეკვეთა გაფორმდა!'
+//               : 'Order created!'
+//           );
+//         }
+//         setShowModal(null);
+//       }
+//     } catch (error) {
+//       console.error('Ошибка:', error);
+//     }
+//   };
+
+//   return (
+//     <div className={styles.container}>
+//       <div className={styles.imageSection}>
+//         <Image
+//           src={`/images/eugenia/${productId}.jpg`}
+//           alt={`Product ${productId}`}
+//           width={800}
+//           height={800}
+//           className={styles.productImage}
+//           priority
+//         />
+//       </div>
+
+//       <div className={styles.divider}></div>
+
+//       <div className={styles.detailsSection}>
+//         <h1 className={styles.sectionTitle}>
+//           {productData.descriptions[lang]}
+//         </h1>
+
+//         <h2 className={styles.sectionTitle}>
+//           {lang === 'RUSSIAN'
+//             ? 'Стоимость: '
+//             : lang === 'GEORGIAN'
+//             ? 'ფასი: '
+//             : 'Price: '}
+//           <span className={styles.price}>{currentPrice} GEL</span>
+//         </h2>
+
+//         <div className={styles.optionsContainer}>
+//           {paymentOptions[lang].map((option, index) => (
+//             <button
+//               key={index}
+//               className={styles.paymentButton}
+//               onClick={() => setShowModal(option)}
+//             >
+//               {option}
+//             </button>
+//           ))}
+//         </div>
+
+//         {/* Модальные окна */}
+//         {showModal && (
+//           <div className={styles.modalOverlay}>
+//             <div className={styles.modal}>
+//               <h2>
+//                 {lang === 'RUSSIAN'
+//                   ? 'Ваше имя:'
+//                   : lang === 'GEORGIAN'
+//                   ? 'თქვენი სახელი:'
+//                   : 'Your name:'}
+//               </h2>
+//               <input
+//                 type='text'
+//                 name='name'
+//                 maxLength={20}
+//                 onChange={handleInputChange}
+//               />
+
+//               <h2>
+//                 {lang === 'RUSSIAN'
+//                   ? 'Адрес доставки:'
+//                   : lang === 'GEORGIAN'
+//                   ? 'მიწოდების მისამართი:'
+//                   : 'Delivery address:'}
+//               </h2>
+//               <input
+//                 type='text'
+//                 name='address'
+//                 maxLength={30}
+//                 onChange={handleInputChange}
+//               />
+
+//               <h2>
+//                 {lang === 'RUSSIAN'
+//                   ? 'Ваш телефон:'
+//                   : lang === 'GEORGIAN'
+//                   ? 'თქვენი ტელეფონი:'
+//                   : 'Your phone:'}
+//               </h2>
+//               <input
+//                 type='tel'
+//                 name='phone'
+//                 maxLength={20}
+//                 onChange={handleInputChange}
+//               />
+
+//               <h2>
+//                 {lang === 'RUSSIAN'
+//                   ? 'Ваш мэйл/телеграм:'
+//                   : lang === 'GEORGIAN'
+//                   ? 'თქვენი ელფოსტა/ტელეგრამი:'
+//                   : 'Your email/telegram:'}
+//               </h2>
+//               <input
+//                 type='text'
+//                 name='mail'
+//                 maxLength={30}
+//                 onChange={handleInputChange}
+//               />
+
+//               <button
+//                 className={styles.submitButton}
+//                 onClick={() =>
+//                   handleSubmit(paymentOptions[lang].indexOf(showModal))
+//                 }
+//               >
+//                 {lang === 'RUSSIAN'
+//                   ? 'Оформить заказ'
+//                   : lang === 'GEORGIAN'
+//                   ? 'შეკვეთის დადასტურება'
+//                   : 'Place Order'}
+//               </button>
+//             </div>
+//           </div>
+//         )}
+
+//         {showPaymentModal && (
+//           <div className={styles.modalOverlay}>
+//             <div className={styles.paymentModal}>
+//               <button
+//                 className={styles.paymentButton}
+//                 onClick={() => setShowPaymentModal(false)}
+//               >
+//                 {lang === 'RUSSIAN'
+//                   ? 'ОПЛАТИТЬ КАРТОЙ'
+//                   : lang === 'GEORGIAN'
+//                   ? 'ბარათით გადახდა'
+//                   : 'PAY BY CARD'}
+//               </button>
+//             </div>
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
+
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import styles from '../../styles/product.module.css';
 import type { Language } from '../types';
@@ -34,9 +290,17 @@ export default function ProductDetails({
     address: '',
     phone: '',
     mail: '',
+    amount: 1,
   });
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Функция определения цены
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const getPrice = (id: number): number | null => {
     const priceMap: Record<string, number> = {
       '1-15': 48,
@@ -75,9 +339,10 @@ export default function ProductDetails({
   const currentPrice = getPrice(productId);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: name === 'amount' ? Math.max(1, Number(value) || 1) : value,
     });
   };
 
@@ -91,8 +356,13 @@ export default function ProductDetails({
         body: JSON.stringify({
           ...formData,
           image: `${productId}.jpg`,
-          amount: 1, // <-- добавлено поле
-          payment: `${paymentOptions[lang][methodIndex]} ${currentPrice} GEL`,
+          amount: formData.amount,
+          //   payment: `${paymentOptions[lang][methodIndex]} ${
+          //     currentPrice * Number(formData.amount)
+          //   } GEL`,
+          payment: `${paymentOptions[lang][methodIndex]} ${
+            (currentPrice ?? 0) * Number(formData.amount)
+          } GEL`,
           paid: 'NO',
         }),
       });
@@ -117,139 +387,280 @@ export default function ProductDetails({
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.imageSection}>
-        <Image
-          src={`/images/eugenia/${productId}.jpg`}
-          alt={`Product ${productId}`}
-          width={800}
-          height={800}
-          className={styles.productImage}
-          priority
-        />
-      </div>
+    <>
+      {isMobile ? (
+        /* Мобильная версия */
+        <div className={styles.mobileContainer}>
+          <div className={styles.mobileImageWrapper}>
+            <Image
+              src={`/images/eugenia/${productId}.jpg`}
+              alt={`Product ${productId}`}
+              fill
+              className={styles.mobileImage}
+              priority
+            />
+          </div>
 
-      <div className={styles.divider}></div>
+          <div className={styles.mobileDetails}>
+            <h1 className={styles.mobileTitle}>
+              {productData.descriptions[lang]}
+            </h1>
+            <h2 className={styles.mobilePrice}>{currentPrice} GEL</h2>
 
-      <div className={styles.detailsSection}>
-        <h1 className={styles.sectionTitle}>
-          {productData.descriptions[lang]}
-        </h1>
+            <div className={styles.mobilePaymentButtons}>
+              {paymentOptions[lang].map((option, index) => (
+                <button
+                  key={index}
+                  className={styles.mobilePaymentButton}
+                  onClick={() => setShowModal(option)}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+          </div>
 
-        <h2 className={styles.sectionTitle}>
-          {lang === 'RUSSIAN'
-            ? 'Стоимость: '
-            : lang === 'GEORGIAN'
-            ? 'ფასი: '
-            : 'Price: '}
-          <span className={styles.price}>{currentPrice} GEL</span>
-        </h2>
+          {showModal && (
+            <div className={styles.fullscreenModal}>
+              <div className={styles.mobileModalContent}>
+                <h2>
+                  {lang === 'RUSSIAN'
+                    ? 'Ваше имя:'
+                    : lang === 'GEORGIAN'
+                    ? 'თქვენი სახელი:'
+                    : 'Your name:'}
+                </h2>
+                <input
+                  type='text'
+                  name='name'
+                  maxLength={20}
+                  onChange={handleInputChange}
+                />
 
-        <div className={styles.optionsContainer}>
-          {paymentOptions[lang].map((option, index) => (
-            <button
-              key={index}
-              className={styles.paymentButton}
-              onClick={() => setShowModal(option)}
-            >
-              {option}
-            </button>
-          ))}
+                <h2>
+                  {lang === 'RUSSIAN'
+                    ? 'Адрес доставки:'
+                    : lang === 'GEORGIAN'
+                    ? 'მიწოდების მისამართი:'
+                    : 'Delivery address:'}
+                </h2>
+                <input
+                  type='text'
+                  name='address'
+                  maxLength={30}
+                  onChange={handleInputChange}
+                />
+
+                <h2>
+                  {lang === 'RUSSIAN'
+                    ? 'Ваш телефон:'
+                    : lang === 'GEORGIAN'
+                    ? 'თქვენი ტელეფონი:'
+                    : 'Your phone:'}
+                </h2>
+                <input
+                  type='tel'
+                  name='phone'
+                  maxLength={20}
+                  onChange={handleInputChange}
+                />
+
+                <h2>
+                  {lang === 'RUSSIAN'
+                    ? 'Ваш мэйл/телеграм:'
+                    : lang === 'GEORGIAN'
+                    ? 'თქვენი ელფოსტა/ტელეგრამი:'
+                    : 'Your email/telegram:'}
+                </h2>
+                <input
+                  type='text'
+                  name='mail'
+                  maxLength={30}
+                  onChange={handleInputChange}
+                />
+
+                <h2>
+                  {lang === 'RUSSIAN'
+                    ? 'Количество:'
+                    : lang === 'GEORGIAN'
+                    ? 'რაოდენობა:'
+                    : 'Amount:'}
+                </h2>
+                <input
+                  type='number'
+                  name='amount'
+                  min={1}
+                  value={formData.amount}
+                  onChange={handleInputChange}
+                />
+
+                <button
+                  className={styles.mobileSubmitButton}
+                  onClick={() =>
+                    handleSubmit(paymentOptions[lang].indexOf(showModal))
+                  }
+                >
+                  {lang === 'RUSSIAN'
+                    ? 'Оформить заказ'
+                    : lang === 'GEORGIAN'
+                    ? 'შეკვეთის დადასტურება'
+                    : 'Place Order'}
+                </button>
+              </div>
+            </div>
+          )}
         </div>
-
-        {/* Модальные окна */}
-        {showModal && (
-          <div className={styles.modalOverlay}>
-            <div className={styles.modal}>
-              <h2>
-                {lang === 'RUSSIAN'
-                  ? 'Ваше имя:'
-                  : lang === 'GEORGIAN'
-                  ? 'თქვენი სახელი:'
-                  : 'Your name:'}
-              </h2>
-              <input
-                type='text'
-                name='name'
-                maxLength={20}
-                onChange={handleInputChange}
-              />
-
-              <h2>
-                {lang === 'RUSSIAN'
-                  ? 'Адрес доставки:'
-                  : lang === 'GEORGIAN'
-                  ? 'მიწოდების მისამართი:'
-                  : 'Delivery address:'}
-              </h2>
-              <input
-                type='text'
-                name='address'
-                maxLength={30}
-                onChange={handleInputChange}
-              />
-
-              <h2>
-                {lang === 'RUSSIAN'
-                  ? 'Ваш телефон:'
-                  : lang === 'GEORGIAN'
-                  ? 'თქვენი ტელეფონი:'
-                  : 'Your phone:'}
-              </h2>
-              <input
-                type='tel'
-                name='phone'
-                maxLength={20}
-                onChange={handleInputChange}
-              />
-
-              <h2>
-                {lang === 'RUSSIAN'
-                  ? 'Ваш мэйл/телеграм:'
-                  : lang === 'GEORGIAN'
-                  ? 'თქვენი ელფოსტა/ტელეგრამი:'
-                  : 'Your email/telegram:'}
-              </h2>
-              <input
-                type='text'
-                name='mail'
-                maxLength={30}
-                onChange={handleInputChange}
-              />
-
-              <button
-                className={styles.submitButton}
-                onClick={() =>
-                  handleSubmit(paymentOptions[lang].indexOf(showModal))
-                }
-              >
-                {lang === 'RUSSIAN'
-                  ? 'Оформить заказ'
-                  : lang === 'GEORGIAN'
-                  ? 'შეკვეთის დადასტურება'
-                  : 'Place Order'}
-              </button>
-            </div>
+      ) : (
+        /* Десктопная версия */
+        <div className={styles.container}>
+          <div className={styles.imageSection}>
+            <Image
+              src={`/images/eugenia/${productId}.jpg`}
+              alt={`Product ${productId}`}
+              width={800}
+              height={800}
+              className={styles.productImage}
+              priority
+            />
           </div>
-        )}
 
-        {showPaymentModal && (
-          <div className={styles.modalOverlay}>
-            <div className={styles.paymentModal}>
-              <button
-                className={styles.paymentButton}
-                onClick={() => setShowPaymentModal(false)}
-              >
-                {lang === 'RUSSIAN'
-                  ? 'ОПЛАТИТЬ КАРТОЙ'
-                  : lang === 'GEORGIAN'
-                  ? 'ბარათით გადახდა'
-                  : 'PAY BY CARD'}
-              </button>
+          <div className={styles.divider}></div>
+
+          <div className={styles.detailsSection}>
+            <h1 className={styles.sectionTitle}>
+              {productData.descriptions[lang]}
+            </h1>
+
+            <h2 className={styles.sectionTitle}>
+              {lang === 'RUSSIAN'
+                ? 'Стоимость: '
+                : lang === 'GEORGIAN'
+                ? 'ფასი: '
+                : 'Price: '}
+              <span className={styles.price}>{currentPrice} GEL</span>
+            </h2>
+
+            <div className={styles.optionsContainer}>
+              {paymentOptions[lang].map((option, index) => (
+                <button
+                  key={index}
+                  className={styles.paymentButton}
+                  onClick={() => setShowModal(option)}
+                >
+                  {option}
+                </button>
+              ))}
             </div>
+
+            {showModal && (
+              <div className={styles.modalOverlay}>
+                <div className={styles.modal}>
+                  <h2>
+                    {lang === 'RUSSIAN'
+                      ? 'Ваше имя:'
+                      : lang === 'GEORGIAN'
+                      ? 'თქვენი სახელი:'
+                      : 'Your name:'}
+                  </h2>
+                  <input
+                    type='text'
+                    name='name'
+                    maxLength={20}
+                    onChange={handleInputChange}
+                  />
+
+                  <h2>
+                    {lang === 'RUSSIAN'
+                      ? 'Адрес доставки:'
+                      : lang === 'GEORGIAN'
+                      ? 'მიწოდების მისამართი:'
+                      : 'Delivery address:'}
+                  </h2>
+                  <input
+                    type='text'
+                    name='address'
+                    maxLength={30}
+                    onChange={handleInputChange}
+                  />
+
+                  <h2>
+                    {lang === 'RUSSIAN'
+                      ? 'Ваш телефон:'
+                      : lang === 'GEORGIAN'
+                      ? 'თქვენი ტელეფონი:'
+                      : 'Your phone:'}
+                  </h2>
+                  <input
+                    type='tel'
+                    name='phone'
+                    maxLength={20}
+                    onChange={handleInputChange}
+                  />
+
+                  <h2>
+                    {lang === 'RUSSIAN'
+                      ? 'Ваш мэйл/телеграм:'
+                      : lang === 'GEORGIAN'
+                      ? 'თქვენი ელფოსტა/ტელეგრამი:'
+                      : 'Your email/telegram:'}
+                  </h2>
+                  <input
+                    type='text'
+                    name='mail'
+                    maxLength={30}
+                    onChange={handleInputChange}
+                  />
+
+                  <h2>
+                    {lang === 'RUSSIAN'
+                      ? 'Количество:'
+                      : lang === 'GEORGIAN'
+                      ? 'რაოდენობა:'
+                      : 'Amount:'}
+                  </h2>
+                  <input
+                    type='number'
+                    name='amount'
+                    min={1}
+                    value={formData.amount}
+                    onChange={handleInputChange}
+                  />
+
+                  <button
+                    className={styles.submitButton}
+                    onClick={() =>
+                      handleSubmit(paymentOptions[lang].indexOf(showModal))
+                    }
+                  >
+                    {lang === 'RUSSIAN'
+                      ? 'Оформить заказ'
+                      : lang === 'GEORGIAN'
+                      ? 'შეკვეთის დადასტურება'
+                      : 'Place Order'}
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+
+      {showPaymentModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.paymentModal}>
+            <button
+              className={styles.paymentButton}
+              onClick={() => setShowPaymentModal(false)}
+            >
+              {lang === 'RUSSIAN'
+                ? 'ОПЛАТИТЬ КАРТОЙ'
+                : lang === 'GEORGIAN'
+                ? 'ბარათით გადახდა'
+                : 'PAY BY CARD'}
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
