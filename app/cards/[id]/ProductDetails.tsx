@@ -291,12 +291,18 @@ export default function ProductDetails({
     amount: 1,
   });
   const [isMobile, setIsMobile] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    setHydrated(true);
+    const checkMobile = () => {
+      if (typeof window !== 'undefined') {
+        setIsMobile(window.innerWidth <= 768);
+      }
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -347,6 +353,8 @@ export default function ProductDetails({
 
   const ext = productId <= 3 ? '.jpg' : '.png';
 
+  if (!hydrated) return null;
+
   return (
     <>
       {isMobile ? (
@@ -392,8 +400,8 @@ export default function ProductDetails({
                     : 'Your name:'}
                 </h2>
                 <input
-                  type='text'
-                  name='name'
+                  type="text"
+                  name="name"
                   maxLength={20}
                   onChange={handleInputChange}
                   value={formData.name}
@@ -407,8 +415,8 @@ export default function ProductDetails({
                     : 'Delivery address:'}
                 </h2>
                 <input
-                  type='text'
-                  name='address'
+                  type="text"
+                  name="address"
                   maxLength={30}
                   onChange={handleInputChange}
                   value={formData.address}
@@ -422,8 +430,8 @@ export default function ProductDetails({
                     : 'Your phone:'}
                 </h2>
                 <input
-                  type='tel'
-                  name='phone'
+                  type="tel"
+                  name="phone"
                   maxLength={20}
                   onChange={handleInputChange}
                   value={formData.phone}
@@ -437,8 +445,8 @@ export default function ProductDetails({
                     : 'Your email/telegram:'}
                 </h2>
                 <input
-                  type='text'
-                  name='mail'
+                  type="text"
+                  name="mail"
                   maxLength={30}
                   onChange={handleInputChange}
                   value={formData.mail}
@@ -453,8 +461,8 @@ export default function ProductDetails({
                     : 'Amount:'}
                 </h2>
                 <input
-                  type='number'
-                  name='amount'
+                  type="number"
+                  name="amount"
                   min={1}
                   value={formData.amount}
                   onChange={handleInputChange}
@@ -521,7 +529,95 @@ export default function ProductDetails({
             {showModal && (
               <div className={styles.modalOverlay}>
                 <div className={styles.modal}>
-                  {/* ... (десктопная версия модального окна без изменений) ... */}
+                  <h2>
+                    {lang === 'RUSSIAN'
+                      ? 'Ваше имя:'
+                      : lang === 'GEORGIAN'
+                      ? 'თქვენი სახელი:'
+                      : 'Your name:'}
+                  </h2>
+                  <input
+                    type="text"
+                    name="name"
+                    maxLength={20}
+                    onChange={handleInputChange}
+                    value={formData.name}
+                  />
+
+                  <h2>
+                    {lang === 'RUSSIAN'
+                      ? 'Адрес доставки:'
+                      : lang === 'GEORGIAN'
+                      ? 'მიწოდების მისამართი:'
+                      : 'Delivery address:'}
+                  </h2>
+                  <input
+                    type="text"
+                    name="address"
+                    maxLength={30}
+                    onChange={handleInputChange}
+                    value={formData.address}
+                  />
+
+                  <h2>
+                    {lang === 'RUSSIAN'
+                      ? 'Ваш телефон:'
+                      : lang === 'GEORGIAN'
+                      ? 'თქვენი ტელეფონი:'
+                      : 'Your phone:'}
+                  </h2>
+                  <input
+                    type="tel"
+                    name="phone"
+                    maxLength={20}
+                    onChange={handleInputChange}
+                    value={formData.phone}
+                  />
+
+                  <h2>
+                    {lang === 'RUSSIAN'
+                      ? 'Ваш мэйл/телеграм:'
+                      : lang === 'GEORGIAN'
+                      ? 'თქვენი ელფოსტა/ტელეგრამი:'
+                      : 'Your email/telegram:'}
+                  </h2>
+                  <input
+                    type="text"
+                    name="mail"
+                    maxLength={30}
+                    onChange={handleInputChange}
+                    value={formData.mail}
+                    className={styles.mailInput}
+                  />
+
+                  <h2>
+                    {lang === 'RUSSIAN'
+                      ? 'Количество:'
+                      : lang === 'GEORGIAN'
+                      ? 'რაოდენობა:'
+                      : 'Amount:'}
+                  </h2>
+                  <input
+                    type="number"
+                    name="amount"
+                    min={1}
+                    value={formData.amount}
+                    onChange={handleInputChange}
+                    style={{ width: '60px' }}
+                  />
+
+                  <button
+                    className={styles.submitButton}
+                    onClick={() =>
+                      handleSubmit(paymentOptions[lang].indexOf(showModal))
+                    }
+                  >
+                    {lang === 'RUSSIAN'
+                      ? 'Оформить заказ'
+                      : lang === 'GEORGIAN'
+                      ? 'შეკვეთის დადასტურება'
+                      : 'Place Order'}
+                  </button>
                 </div>
               </div>
             )}
