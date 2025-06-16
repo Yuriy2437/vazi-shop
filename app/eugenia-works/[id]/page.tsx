@@ -12,17 +12,20 @@ export default async function Page({
   params,
   searchParams,
 }: {
-  params: { id: string };
-  searchParams: { lang?: string };
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ lang?: string }>;
 }) {
-  const langUpper = searchParams.lang?.toUpperCase() ?? 'ENGLISH';
+  const { id } = await params;
+  const { lang } = await searchParams;
+
+  const langUpper = lang?.toUpperCase() ?? 'ENGLISH';
   const validLang: Language = ['ENGLISH', 'RUSSIAN', 'GEORGIAN'].includes(
     langUpper
   )
     ? (langUpper as Language)
     : 'ENGLISH';
 
-  const productId = parseInt(params.id, 10);
+  const productId = parseInt(id, 10);
   const productData = productDetails[productId];
 
   if (!productData) return <div>Product not found</div>;
