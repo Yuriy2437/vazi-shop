@@ -20,7 +20,7 @@ type Order = {
 // Функция для форматирования пути изображения
 const formatImagePath = (path: string) => {
   // Удаляем начальный 'images/' и разбиваем на части по 7 символов
-  const cleanedPath = path.replace(/^images\//, '');
+  const cleanedPath = path.replace(/^\/?images\//, '');
   return cleanedPath.match(/.{1,7}/g)?.join('\n') || cleanedPath;
 };
 
