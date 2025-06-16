@@ -125,11 +125,19 @@
   border-radius: 4px;
 }
 
-.breakable {
-  word-break: normal; /* Отключаем принудительный перенос */
+/* .breakable {
+  word-break: normal; 
   max-width: 110px;
   white-space: normal;
   font-size: 15px;
+} */
+
+.breakable {
+  white-space: pre-wrap; /* Сохраняем переносы строк */
+  word-break: keep-all; /* Не разбиваем слова */
+  max-width: 80px;
+  line-height: 1.2;
+  font-family: monospace;
 }
 
 .statusSelect {

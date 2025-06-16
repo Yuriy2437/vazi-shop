@@ -17,6 +17,13 @@ type Order = {
   createdAt: string;
 };
 
+// Функция для форматирования пути изображения
+const formatImagePath = (path: string) => {
+  // Удаляем начальный 'images/' и разбиваем на части по 7 символов
+  const cleanedPath = path.replace(/^images\//, '');
+  return cleanedPath.match(/.{1,7}/g)?.join('\n') || cleanedPath;
+};
+
 export default function AdminPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -83,7 +90,7 @@ export default function AdminPage() {
           <span>Адрес</span>
           <span>Телефон</span>
           <span>Мэйл</span>
-          <span>Оплата</span> {/* Здесь уже итоговая сумма */}
+          <span>Оплата</span>
           <span>Оплачено</span>
           <span>Дата</span>
           <span>Удалить</span>
@@ -91,17 +98,17 @@ export default function AdminPage() {
 
         <div className={styles.tableBody}>
           {orders.map((order) => {
-            // Убрали парсинг суммы — используем payment как есть
             const isCard = /(card|картой|ბარათით)/i.test(order.payment);
 
             return (
               <div key={order._id} className={styles.tableRow}>
-                <span className={styles.breakable}>{order.image}</span>
+                <span className={styles.breakable}>
+                  {formatImagePath(order.image)}
+                </span>
                 <span>{order.amount}</span>
                 <span className={styles.breakable}>{order.name}</span>
                 <span className={styles.breakable}>{order.address}</span>
                 <span className={styles.breakable}>{order.phone}</span>
-                {/* <span className={styles.breakable}>{order.mail}</span> */}
                 <span className={`${styles.breakable} ${styles.mailCell}`}>
                   {order.mail}
                 </span>

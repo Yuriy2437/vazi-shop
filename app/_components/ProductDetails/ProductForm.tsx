@@ -22,6 +22,7 @@ interface ProductFormProps {
       amount: number;
     };
   }) => void;
+  allowQuantity?: boolean;
 }
 
 export default function ProductForm({
@@ -29,6 +30,7 @@ export default function ProductForm({
   price,
   imagePath,
   onSubmit,
+  allowQuantity = true, // По умолчанию true
 }: ProductFormProps) {
   const [formData, setFormData] = useState<{
     name: string;
@@ -158,21 +160,23 @@ export default function ProductForm({
           />
         </label>
       </div>
-      <div className={styles.formGroup}>
-        <label className={styles.formLabel}>
-          {labels.amount}
-          <input
-            type='number'
-            name='amount'
-            value={formData.amount}
-            min={1}
-            onChange={handleChange}
-            required
-            className={styles.formInput}
-            style={{ maxWidth: 100 }}
-          />
-        </label>
-      </div>
+      {allowQuantity && (
+        <div className={styles.formGroup}>
+          <label className={styles.formLabel}>
+            {labels.amount}
+            <input
+              type='number'
+              name='amount'
+              value={formData.amount}
+              min={1}
+              onChange={handleChange}
+              required
+              className={styles.formInput}
+              style={{ maxWidth: 100 }}
+            />
+          </label>
+        </div>
+      )}
       <div className={styles.formGroup}>
         <label className={styles.formLabel}>
           {lang === 'ENGLISH'

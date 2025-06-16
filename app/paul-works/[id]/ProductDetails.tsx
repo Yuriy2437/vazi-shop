@@ -63,6 +63,7 @@ export default function ProductDetails({
           price={price}
           imagePath={`/images/paul/p${productId}.jpg`}
           onSubmit={handleSubmit}
+          allowQuantity={false}
         />
       </div>
 
