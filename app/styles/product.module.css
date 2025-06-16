@@ -301,7 +301,7 @@
     font-weight: 600;
   }
 
-  .fullscreenModal {
+  /* .fullscreenModal {
     position: fixed;
     top: 0;
     left: 0;
@@ -314,12 +314,28 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  } */
+
+  .fullscreenModal {
+    position: fixed;
+    top: 20px;
+    left: 0;
+    right: 0;
+    bottom: 20px;
+    background: rgba(0, 0, 0, 0.85);
+    padding: 0;
+    z-index: 2000;
+    overflow-y: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .mobileModalContent {
-    background: #0000ff;
+    /* background: #0000ff; */
+    background: #ffe066; /* Ярко-жёлтый фон */
     padding: 1.5rem;
-    border-radius: 8px;
+    border-radius: 12px;
     max-width: 500px;
     margin: 0 auto;
     width: 100%;
