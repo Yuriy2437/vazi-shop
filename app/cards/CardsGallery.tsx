@@ -1,22 +1,16 @@
 'use client';
 
 import Image from 'next/image';
-import styles from '../styles/gallery.module.css';
+import styles from '@/app/styles/gallery.module.css';
 
 const CARD_PRICE = 7;
+const TOTAL_CARDS = 45; // 3 jpg + 42 png
 
-export default function GalleryContent({ lang }: { lang: string }) {
-  // Первые 3 — jpg, остальные — png
-  const images = [
-    ...Array.from({ length: 3 }, (_, i) => ({
-      id: i + 1,
-      src: `/images/cards/k${i + 1}.jpg`,
-    })),
-    ...Array.from({ length: 42 }, (_, i) => ({
-      id: i + 4,
-      src: `/images/cards/k${i + 4}.png`,
-    })),
-  ];
+export default function CardsGallery({ lang }: { lang: string }) {
+  const images = Array.from({ length: TOTAL_CARDS }, (_, i) => ({
+    id: i + 1,
+    src: `/images/cards/k${i + 1}.${i < 3 ? 'jpg' : 'png'}`,
+  }));
 
   return (
     <div className={styles.galleryContainer}>
@@ -34,6 +28,7 @@ export default function GalleryContent({ lang }: { lang: string }) {
               height={400}
               className={styles.image}
               loading='lazy'
+              sizes='(max-width: 768px) 50vw, 33vw'
             />
             <div className={styles.priceBadge}>{CARD_PRICE} GEL</div>
           </a>

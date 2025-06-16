@@ -1,4 +1,4 @@
-import type { Language } from './types';
+import type { Language } from '@/app/_utils/types';
 
 export const productDetails: Record<
   number,

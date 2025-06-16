@@ -1,6 +1,5 @@
 import './styles/globals.css';
 import type { Metadata } from 'next';
-// import { SessionProvider } from 'next-auth/react';
 import { Providers } from './providers';
 
 export const metadata: Metadata = {

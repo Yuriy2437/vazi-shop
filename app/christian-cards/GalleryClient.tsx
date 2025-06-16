@@ -1,11 +1,11 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import GalleryContent from './GalleryContent';
+import ChristianCardsGallery from './ChristianCardsGallery';
 
 export default function GalleryClient() {
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang') || 'ENGLISH';
 
-  return <GalleryContent lang={lang} />;
+  return <ChristianCardsGallery lang={lang} />;
 }

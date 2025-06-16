@@ -1,4 +1,4 @@
-import type { Language } from './types';
+import type { Language } from '@/app/_utils/types';
 
 // Общее описание для всех открыток
 const COMMON_DESCRIPTION: Record<Language, string> = {

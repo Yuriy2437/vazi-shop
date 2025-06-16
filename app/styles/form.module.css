@@ -1,0 +1,85 @@
+.formContainer {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #d4c8b5;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.formLabel {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #4a3f35;
+}
+
+.formInput,
+.formSelect {
+  width: 100%;
+  padding: 0.8rem;
+  border: 2px solid #6b4226;
+  border-radius: 4px;
+  background: #e6dcc3;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.formInput:focus,
+.formSelect:focus {
+  outline: none;
+  border-color: #8b5e34;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 1rem;
+  background: #6b4226;
+  color: #ffd700;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.submitButton:hover {
+  background: #8b5e34;
+}
+
+.submitButton:disabled {
+  background: #a68a64;
+  cursor: not-allowed;
+}
+
+.successMessage {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #dff0d8;
+  color: #3c763d;
+  border-radius: 4px;
+}
+
+.errorMessage {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #f2dede;
+  color: #a94442;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .formContainer {
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+  .formInput,
+  .formSelect {
+    font-size: 0.9rem;
+  }
+}

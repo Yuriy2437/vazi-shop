@@ -1,11 +1,10 @@
-import { Suspense } from 'react';
-import GallerySkeleton from './GallerySkeleton';
+import GalleryLayout from '@/app/_components/Gallery/GalleryLayout';
 import GalleryClient from './GalleryClient';
 
-export default function EugeniaWorksPage() {
+export default function ChristianCardsPage() {
   return (
-    <Suspense fallback={<GallerySkeleton />}>
+    <GalleryLayout>
       <GalleryClient />
-    </Suspense>
+    </GalleryLayout>
   );
 }

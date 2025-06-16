@@ -1,5 +1,5 @@
 import { productDetails } from '../productDetails';
-import type { Language } from '../types';
+import type { Language } from '@/app/_utils/types';
 import ProductDetails from './ProductDetails';
 
 export async function generateStaticParams() {
