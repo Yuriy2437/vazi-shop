@@ -20,7 +20,7 @@ function PageContent({ lang }: { lang: string }) {
       'მხატვარ ევგენიას სუვენირები'.toUpperCase(),
       'საფოსტო ბარათები'.toUpperCase(),
       'ქრისტიანული ბარათები'.toUpperCase(),
-      'სახელოსნო "მარკოვ-დომი"'.toUpperCase(),
+      'სახელოსნო "მარკოვის სახლი"'.toUpperCase(),
     ],
   };
 
