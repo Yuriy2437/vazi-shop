@@ -1,12 +1,20 @@
 import { Language } from './types';
 
 export const paymentOptions: Record<Language, string[]> = {
-  ENGLISH: ['Cash to courier', 'Payment by terminal', 'Pay by card'],
-  RUSSIAN: ['Оплата курьеру', 'Оплата по терминалу', 'Оплата картой'],
+  ENGLISH: [
+    'Cash to the courier',
+    'By card via courier terminal',
+    // 'By card online',
+  ],
+  RUSSIAN: [
+    'Наличными курьеру',
+    'Картой через терминал курьера',
+    // 'Оплата картой',
+  ],
   GEORGIAN: [
     'ნაღდი ფული კურიერთან',
-    'ტერმინალის მეშვეობით გადახდა',
-    'ბანკის ბარათით',
+    'ბარათით კურიერის ტერმინალის მეშვეობით',
+    // 'ბარათით ონლაინ',
   ],
 };
 

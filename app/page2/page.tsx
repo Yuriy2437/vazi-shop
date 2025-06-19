@@ -5,22 +5,22 @@ import styles from '../styles/page2.module.css';
 function PageContent({ lang }: { lang: string }) {
   const buttonTexts = {
     ENGLISH: [
-      'SOUVENIRS OF MASTER EUGENIA',
+      'SOUVENIRS OF THE ARTIST EVGENIA',
       'POSTCARDS',
       'CHRISTIAN POSTCARDS',
-      'SOUVENIRS OF MASTER PAUL',
+      'WORKSHOP "MARKOV-DOM"',
     ],
     RUSSIAN: [
-      'СУВЕНИРЫ МАСТЕРА ЕВГЕНИИ',
+      'СУВЕНИРЫ ХУДОЖНИКА ЕВГЕНИИ',
       'ОТКРЫТКИ',
       'ХРИСТИАНСКИЕ ОТКРЫТКИ',
-      'СУВЕНИРЫ МАСТЕРА ПАВЛА',
+      'МАСТЕРСКАЯ "MARKOV-DOM"',
     ],
     GEORGIAN: [
-      'ოსტატ ევგენიას სუვენირები'.toUpperCase(),
+      'მხატვარ ევგენიას სუვენირები'.toUpperCase(),
       'საფოსტო ბარათები'.toUpperCase(),
       'ქრისტიანული ბარათები'.toUpperCase(),
-      'ოსტატ პაველის სუვენირები'.toUpperCase(),
+      'სახელოსნო "მარკოვ-დომი"'.toUpperCase(),
     ],
   };
 
