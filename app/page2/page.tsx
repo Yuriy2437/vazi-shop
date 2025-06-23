@@ -74,7 +74,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import styles from '../styles/page2.module.css';
@@ -164,7 +164,28 @@ const BUTTON_CONFIG = {
 
 export default function Page2() {
   const [category, setCategory] = useState<Category>(null);
+  const [isClient, setIsClient] = useState(false);
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.buttonContainer}>
+          {[...Array(5)].map((_, i) => (
+            <div
+              key={i}
+              className={styles.masterBtn}
+              style={{ background: '#ccc' }}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   // Определяем язык из параметров URL
   const langParam = searchParams.get('lang') || 'ENGLISH';
@@ -178,10 +199,19 @@ export default function Page2() {
   // Строим параметр языка для URL
   const langQuery = `?lang=${validLang}`;
 
-  // Рендер контента в зависимости от выбранной категории
-  const renderContent = () => {
-    if (!category) {
-      return (
+  return (
+    <div className={styles.container}>
+      <Image
+        src='/page2.jpeg'
+        alt='Background'
+        fill
+        priority
+        className={styles.background}
+        sizes='(max-width: 768px) 100vw, 50vw'
+      />
+
+      {/* Основные категории */}
+      {!category && (
         <div className={styles.buttonContainer}>
           {BUTTON_CONFIG.main[validLang].map((btn) => (
             <button
@@ -193,11 +223,10 @@ export default function Page2() {
             </button>
           ))}
         </div>
-      );
-    }
+      )}
 
-    if (category === 'SOUVENIRS') {
-      return (
+      {/* Подкатегории для сувениров */}
+      {category === 'SOUVENIRS' && (
         <div className={styles.buttonContainer}>
           {BUTTON_CONFIG.souvenirs[validLang].map((btn) => (
             <a
@@ -215,11 +244,10 @@ export default function Page2() {
             {BUTTON_CONFIG.back[validLang]}
           </button>
         </div>
-      );
-    }
+      )}
 
-    if (category === 'POSTCARDS') {
-      return (
+      {/* Подкатегории для открыток */}
+      {category === 'POSTCARDS' && (
         <div className={styles.buttonContainer}>
           {BUTTON_CONFIG.postcards[validLang].map((btn) => (
             <a
@@ -237,40 +265,29 @@ export default function Page2() {
             {BUTTON_CONFIG.back[validLang]}
           </button>
         </div>
-      );
-    }
+      )}
 
-    // Для других категорий
-    return (
-      <div className={styles.buttonContainer}>
-        <div
-          className={styles.masterBtn}
-          style={{
-            background: '#888',
-            color: '#fff',
-            cursor: 'default',
-          }}
-        >
-          {BUTTON_CONFIG.comingSoon[validLang]}
+      {/* Другие категории */}
+      {category && category !== 'SOUVENIRS' && category !== 'POSTCARDS' && (
+        <div className={styles.buttonContainer}>
+          <div
+            className={styles.masterBtn}
+            style={{
+              background: '#888',
+              color: '#fff',
+              cursor: 'default',
+            }}
+          >
+            {BUTTON_CONFIG.comingSoon[validLang]}
+          </div>
+          <button
+            className={styles.masterBtn}
+            onClick={() => setCategory(null)}
+          >
+            {BUTTON_CONFIG.back[validLang]}
+          </button>
         </div>
-        <button className={styles.masterBtn} onClick={() => setCategory(null)}>
-          {BUTTON_CONFIG.back[validLang]}
-        </button>
-      </div>
-    );
-  };
-
-  return (
-    <div className={styles.container}>
-      <Image
-        src='/page2.jpeg'
-        alt='Background'
-        fill
-        priority
-        className={styles.background}
-        sizes='(max-width: 768px) 100vw, 50vw'
-      />
-      {renderContent()}
+      )}
     </div>
   );
 }
