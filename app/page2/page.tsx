@@ -156,16 +156,23 @@ const backText: Record<Language, string> = {
   GEORGIAN: 'უკან',
 };
 
-function PageContent({ lang }: { lang: Language }) {
+export default function Page({
+  searchParams,
+}: {
+  searchParams: { lang?: string };
+}) {
   const [category, setCategory] = useState<Category>(null);
 
-  // Получаем параметры языка для передачи в ссылках
+  const langUpper = searchParams.lang?.toUpperCase() || 'ENGLISH';
+  const lang: Language = ['ENGLISH', 'RUSSIAN', 'GEORGIAN'].includes(langUpper)
+    ? (langUpper as Language)
+    : 'ENGLISH';
+
   const langParam = `?lang=${lang}`;
 
   let content;
 
   if (!category) {
-    // Главное меню
     content = (
       <div className={styles.buttonContainer}>
         {mainButtons[lang].map((btn) => (
@@ -182,19 +189,15 @@ function PageContent({ lang }: { lang: Language }) {
   } else if (category === 'SOUVENIRS') {
     content = (
       <div className={styles.buttonContainer}>
-        {souvenirsSub[lang].map(
-          (
-            btn // Убрали индекс i
-          ) => (
-            <a
-              key={btn.href}
-              href={btn.href + langParam}
-              className={styles.masterBtn}
-            >
-              {btn.label}
-            </a>
-          )
-        )}
+        {souvenirsSub[lang].map((btn) => (
+          <a
+            key={btn.href}
+            href={btn.href + langParam}
+            className={styles.masterBtn}
+          >
+            {btn.label}
+          </a>
+        ))}
         <button className={styles.masterBtn} onClick={() => setCategory(null)}>
           {backText[lang]}
         </button>
@@ -203,26 +206,21 @@ function PageContent({ lang }: { lang: Language }) {
   } else if (category === 'POSTCARDS') {
     content = (
       <div className={styles.buttonContainer}>
-        {postcardsSub[lang].map(
-          (
-            btn // Убрали индекс i
-          ) => (
-            <a
-              key={btn.href}
-              href={btn.href + langParam}
-              className={styles.masterBtn}
-            >
-              {btn.label}
-            </a>
-          )
-        )}
+        {postcardsSub[lang].map((btn) => (
+          <a
+            key={btn.href}
+            href={btn.href + langParam}
+            className={styles.masterBtn}
+          >
+            {btn.label}
+          </a>
+        ))}
         <button className={styles.masterBtn} onClick={() => setCategory(null)}>
           {backText[lang]}
         </button>
       </div>
     );
   } else {
-    // Для остальных категорий (заглушка + кнопка назад)
     content = (
       <div className={styles.buttonContainer}>
         <div
@@ -243,7 +241,7 @@ function PageContent({ lang }: { lang: Language }) {
   }
 
   return (
-    <main className={styles.container}>
+    <div className={styles.container}>
       <Image
         src='/page2.jpeg'
         alt='Background'
@@ -253,22 +251,6 @@ function PageContent({ lang }: { lang: Language }) {
         sizes='(max-width: 768px) 100vw, 50vw'
       />
       {content}
-    </main>
+    </div>
   );
-}
-
-// Убираем async, т.к. это клиентский компонент
-export default function Page({
-  searchParams,
-}: {
-  searchParams: { lang?: string };
-}) {
-  const langUpper = searchParams.lang?.toUpperCase() || 'ENGLISH';
-  const validLang: Language = ['ENGLISH', 'RUSSIAN', 'GEORGIAN'].includes(
-    langUpper
-  )
-    ? (langUpper as Language)
-    : 'ENGLISH';
-
-  return <PageContent lang={validLang} />;
 }
