@@ -74,10 +74,11 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import styles from '../styles/page2.module.css';
+import Loading from './loading';
 
 type Language = 'ENGLISH' | 'RUSSIAN' | 'GEORGIAN';
 type Category =
@@ -163,10 +164,10 @@ const BUTTON_CONFIG = {
   },
 };
 
-export default function Page2() {
+function PageContent() {
   const [category, setCategory] = useState<Category>(null);
-  const [lang, setLang] = useState<Language>('ENGLISH');
   const searchParams = useSearchParams();
+  const [lang, setLang] = useState<Language>('ENGLISH');
 
   useEffect(() => {
     const langParam = searchParams.get('lang') || 'ENGLISH';
@@ -189,7 +190,6 @@ export default function Page2() {
         sizes='(max-width: 768px) 100vw, 50vw'
       />
 
-      {/* Основное меню */}
       {!category && (
         <div className={styles.buttonContainer}>
           {BUTTON_CONFIG.main[lang].map((btn) => (
@@ -204,7 +204,6 @@ export default function Page2() {
         </div>
       )}
 
-      {/* Меню сувениров */}
       {category === 'SOUVENIRS' && (
         <div className={styles.buttonContainer}>
           {BUTTON_CONFIG.sub.SOUVENIRS[lang].map((btn) => (
@@ -225,7 +224,6 @@ export default function Page2() {
         </div>
       )}
 
-      {/* Меню открыток */}
       {category === 'POSTCARDS' && (
         <div className={styles.buttonContainer}>
           {BUTTON_CONFIG.sub.POSTCARDS[lang].map((btn) => (
@@ -246,7 +244,6 @@ export default function Page2() {
         </div>
       )}
 
-      {/* Другие категории */}
       {category && category !== 'SOUVENIRS' && category !== 'POSTCARDS' && (
         <div className={styles.buttonContainer}>
           <div
@@ -268,5 +265,13 @@ export default function Page2() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function Page2() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <PageContent />
+    </Suspense>
   );
 }
