@@ -74,7 +74,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import styles from '../styles/page2.module.css';
@@ -88,162 +88,177 @@ type Category =
   | 'CONTACTS'
   | null;
 
-const mainButtons: Record<Language, { label: string; value: Category }[]> = {
-  ENGLISH: [
-    { label: 'SOUVENIRS', value: 'SOUVENIRS' },
-    { label: 'POSTCARDS', value: 'POSTCARDS' },
-    { label: 'TEA AND COFFEE', value: 'TEA_COFFEE' },
-    { label: 'BOOKS', value: 'BOOKS' },
-    { label: 'OUR CONTACTS', value: 'CONTACTS' },
-  ],
-  RUSSIAN: [
-    { label: 'СУВЕНИРЫ', value: 'SOUVENIRS' },
-    { label: 'ОТКРЫТКИ', value: 'POSTCARDS' },
-    { label: 'ЧАЙ И КОФЕ', value: 'TEA_COFFEE' },
-    { label: 'КНИГИ', value: 'BOOKS' },
-    { label: 'НАШИ КОНТАКТЫ', value: 'CONTACTS' },
-  ],
-  GEORGIAN: [
-    { label: 'სუვენირები', value: 'SOUVENIRS' },
-    { label: 'ღია ბარათები', value: 'POSTCARDS' },
-    { label: 'ჩაი და ყავა', value: 'TEA_COFFEE' },
-    { label: 'წიგნები', value: 'BOOKS' },
-    { label: 'ჩვენი კონტაქტები', value: 'CONTACTS' },
-  ],
+// Конфигурация кнопок
+const BUTTON_CONFIG = {
+  main: {
+    ENGLISH: [
+      { label: 'SOUVENIRS', value: 'SOUVENIRS' as Category },
+      { label: 'POSTCARDS', value: 'POSTCARDS' as Category },
+      { label: 'TEA AND COFFEE', value: 'TEA_COFFEE' as Category },
+      { label: 'BOOKS', value: 'BOOKS' as Category },
+      { label: 'OUR CONTACTS', value: 'CONTACTS' as Category },
+    ],
+    RUSSIAN: [
+      { label: 'СУВЕНИРЫ', value: 'SOUVENIRS' as Category },
+      { label: 'ОТКРЫТКИ', value: 'POSTCARDS' as Category },
+      { label: 'ЧАЙ И КОФЕ', value: 'TEA_COFFEE' as Category },
+      { label: 'КНИГИ', value: 'BOOKS' as Category },
+      { label: 'НАШИ КОНТАКТЫ', value: 'CONTACTS' as Category },
+    ],
+    GEORGIAN: [
+      { label: 'სუვენირები', value: 'SOUVENIRS' as Category },
+      { label: 'ღია ბარათები', value: 'POSTCARDS' as Category },
+      { label: 'ჩაი და ყავა', value: 'TEA_COFFEE' as Category },
+      { label: 'წიგნები', value: 'BOOKS' as Category },
+      { label: 'ჩვენი კონტაქტები', value: 'CONTACTS' as Category },
+    ],
+  },
+  souvenirs: {
+    ENGLISH: [
+      { label: 'EUGENIA STRASHKO SOUVENIRS', href: '/eugenia-works' },
+      { label: 'MARKOV-DOM WORKSHOP', href: '/paul-works' },
+    ],
+    RUSSIAN: [
+      { label: 'СУВЕНИРЫ ХУДОЖНИКА ЕВГЕНИИ СТРАШКО', href: '/eugenia-works' },
+      { label: 'МАСТЕРСКАЯ «MARKOV-DOM»', href: '/paul-works' },
+    ],
+    GEORGIAN: [
+      { label: 'ევგენია სტრაშკოს სუვენირები', href: '/eugenia-works' },
+      { label: 'სახელოსნო «MARKOV-DOM»', href: '/paul-works' },
+    ],
+  },
+  postcards: {
+    ENGLISH: [
+      { label: 'EUGENIA STRASHKO POSTCARDS', href: '/cards' },
+      {
+        label: 'CHRISTIAN POSTCARDS BY EUGENIA STRASHKO',
+        href: '/christian-cards',
+      },
+    ],
+    RUSSIAN: [
+      { label: 'ОТКРЫТКИ ХУДОЖНИКА ЕВГЕНИИ СТРАШКО', href: '/cards' },
+      {
+        label: 'ХРИСТИАНСКИЕ ОТКРЫТКИ ХУДОЖНИКА ЕВГЕНИИ СТРАШКО',
+        href: '/christian-cards',
+      },
+    ],
+    GEORGIAN: [
+      { label: 'ევგენია სტრაშკოს ღია ბარათები', href: '/cards' },
+      {
+        label: 'ევგენია სტრაშკოს ქრისტიანული ღია ბარათები',
+        href: '/christian-cards',
+      },
+    ],
+  },
+  back: {
+    ENGLISH: 'BACK',
+    RUSSIAN: 'НАЗАД',
+    GEORGIAN: 'უკან',
+  },
+  comingSoon: {
+    ENGLISH: 'Coming soon',
+    RUSSIAN: 'Скоро',
+    GEORGIAN: 'მალე',
+  },
 };
 
-const souvenirsSub: Record<Language, { label: string; href: string }[]> = {
-  ENGLISH: [
-    { label: 'EUGENIA STRASHKO SOUVENIRS', href: '/eugenia-works' },
-    { label: 'MARKOV-DOM WORKSHOP', href: '/paul-works' },
-  ],
-  RUSSIAN: [
-    { label: 'СУВЕНИРЫ ХУДОЖНИКА ЕВГЕНИИ СТРАШКО', href: '/eugenia-works' },
-    { label: 'МАСТЕРСКАЯ «MARKOV-DOM»', href: '/paul-works' },
-  ],
-  GEORGIAN: [
-    { label: 'ევგენია სტრაშკოს სუვენირები', href: '/eugenia-works' },
-    { label: 'სახელოსნო «MARKOV-DOM»', href: '/paul-works' },
-  ],
-};
-
-const postcardsSub: Record<Language, { label: string; href: string }[]> = {
-  ENGLISH: [
-    { label: 'EUGENIA STRASHKO POSTCARDS', href: '/cards' },
-    {
-      label: 'CHRISTIAN POSTCARDS BY EUGENIA STRASHKO',
-      href: '/christian-cards',
-    },
-  ],
-  RUSSIAN: [
-    { label: 'ОТКРЫТКИ ХУДОЖНИКА ЕВГЕНИИ СТРАШКО', href: '/cards' },
-    {
-      label: 'ХРИСТИАНСКИЕ ОТКРЫТКИ ХУДОЖНИКА ЕВГЕНИИ СТРАШКО',
-      href: '/christian-cards',
-    },
-  ],
-  GEORGIAN: [
-    { label: 'ევგენია სტრაშკოს ღია ბარათები', href: '/cards' },
-    {
-      label: 'ევგენია სტრაშკოს ქრისტიანული ღია ბარათები',
-      href: '/christian-cards',
-    },
-  ],
-};
-
-const backText: Record<Language, string> = {
-  ENGLISH: 'BACK',
-  RUSSIAN: 'НАЗАД',
-  GEORGIAN: 'უკან',
-};
-
-export default function Page() {
+export default function Page2() {
   const [category, setCategory] = useState<Category>(null);
-  const [lang, setLang] = useState<Language>('ENGLISH');
   const searchParams = useSearchParams();
 
-  useEffect(() => {
-    const langParam = searchParams.get('lang') || 'ENGLISH';
-    const langUpper = langParam.toUpperCase();
-    const validLang: Language = ['ENGLISH', 'RUSSIAN', 'GEORGIAN'].includes(
-      langUpper
-    )
-      ? (langUpper as Language)
-      : 'ENGLISH';
-    setLang(validLang);
-  }, [searchParams]);
+  // Определяем язык из параметров URL
+  const langParam = searchParams.get('lang') || 'ENGLISH';
+  const langUpper = langParam.toUpperCase();
+  const validLang: Language = (
+    ['ENGLISH', 'RUSSIAN', 'GEORGIAN'].includes(langUpper)
+      ? langUpper
+      : 'ENGLISH'
+  ) as Language;
 
-  const langParam = `?lang=${lang}`;
+  // Строим параметр языка для URL
+  const langQuery = `?lang=${validLang}`;
 
-  let content;
+  // Рендер контента в зависимости от выбранной категории
+  const renderContent = () => {
+    if (!category) {
+      return (
+        <div className={styles.buttonContainer}>
+          {BUTTON_CONFIG.main[validLang].map((btn) => (
+            <button
+              key={btn.value}
+              className={styles.masterBtn}
+              onClick={() => setCategory(btn.value)}
+            >
+              {btn.label}
+            </button>
+          ))}
+        </div>
+      );
+    }
 
-  if (!category) {
-    content = (
-      <div className={styles.buttonContainer}>
-        {mainButtons[lang].map((btn) => (
+    if (category === 'SOUVENIRS') {
+      return (
+        <div className={styles.buttonContainer}>
+          {BUTTON_CONFIG.souvenirs[validLang].map((btn) => (
+            <a
+              key={btn.href}
+              href={`${btn.href}${langQuery}`}
+              className={styles.masterBtn}
+            >
+              {btn.label}
+            </a>
+          ))}
           <button
-            key={btn.value}
             className={styles.masterBtn}
-            onClick={() => setCategory(btn.value)}
+            onClick={() => setCategory(null)}
           >
-            {btn.label}
+            {BUTTON_CONFIG.back[validLang]}
           </button>
-        ))}
-      </div>
-    );
-  } else if (category === 'SOUVENIRS') {
-    content = (
-      <div className={styles.buttonContainer}>
-        {souvenirsSub[lang].map((btn) => (
-          <a
-            key={btn.href}
-            href={btn.href + langParam}
+        </div>
+      );
+    }
+
+    if (category === 'POSTCARDS') {
+      return (
+        <div className={styles.buttonContainer}>
+          {BUTTON_CONFIG.postcards[validLang].map((btn) => (
+            <a
+              key={btn.href}
+              href={`${btn.href}${langQuery}`}
+              className={styles.masterBtn}
+            >
+              {btn.label}
+            </a>
+          ))}
+          <button
             className={styles.masterBtn}
+            onClick={() => setCategory(null)}
           >
-            {btn.label}
-          </a>
-        ))}
-        <button className={styles.masterBtn} onClick={() => setCategory(null)}>
-          {backText[lang]}
-        </button>
-      </div>
-    );
-  } else if (category === 'POSTCARDS') {
-    content = (
-      <div className={styles.buttonContainer}>
-        {postcardsSub[lang].map((btn) => (
-          <a
-            key={btn.href}
-            href={btn.href + langParam}
-            className={styles.masterBtn}
-          >
-            {btn.label}
-          </a>
-        ))}
-        <button className={styles.masterBtn} onClick={() => setCategory(null)}>
-          {backText[lang]}
-        </button>
-      </div>
-    );
-  } else {
-    content = (
+            {BUTTON_CONFIG.back[validLang]}
+          </button>
+        </div>
+      );
+    }
+
+    // Для других категорий
+    return (
       <div className={styles.buttonContainer}>
         <div
           className={styles.masterBtn}
-          style={{ background: '#888', color: '#fff', cursor: 'default' }}
+          style={{
+            background: '#888',
+            color: '#fff',
+            cursor: 'default',
+          }}
         >
-          {lang === 'ENGLISH'
-            ? 'Coming soon'
-            : lang === 'RUSSIAN'
-            ? 'Скоро'
-            : 'მალე'}
+          {BUTTON_CONFIG.comingSoon[validLang]}
         </div>
         <button className={styles.masterBtn} onClick={() => setCategory(null)}>
-          {backText[lang]}
+          {BUTTON_CONFIG.back[validLang]}
         </button>
       </div>
     );
-  }
+  };
 
   return (
     <div className={styles.container}>
@@ -255,7 +270,7 @@ export default function Page() {
         className={styles.background}
         sizes='(max-width: 768px) 100vw, 50vw'
       />
-      {content}
+      {renderContent()}
     </div>
   );
 }
