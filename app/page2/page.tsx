@@ -74,7 +74,8 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import styles from '../styles/page2.module.css';
 
@@ -156,17 +157,21 @@ const backText: Record<Language, string> = {
   GEORGIAN: 'უკან',
 };
 
-export default function Page({
-  searchParams,
-}: {
-  searchParams: { lang?: string };
-}) {
+export default function Page() {
   const [category, setCategory] = useState<Category>(null);
+  const [lang, setLang] = useState<Language>('ENGLISH');
+  const searchParams = useSearchParams();
 
-  const langUpper = searchParams.lang?.toUpperCase() || 'ENGLISH';
-  const lang: Language = ['ENGLISH', 'RUSSIAN', 'GEORGIAN'].includes(langUpper)
-    ? (langUpper as Language)
-    : 'ENGLISH';
+  useEffect(() => {
+    const langParam = searchParams.get('lang') || 'ENGLISH';
+    const langUpper = langParam.toUpperCase();
+    const validLang: Language = ['ENGLISH', 'RUSSIAN', 'GEORGIAN'].includes(
+      langUpper
+    )
+      ? (langUpper as Language)
+      : 'ENGLISH';
+    setLang(validLang);
+  }, [searchParams]);
 
   const langParam = `?lang=${lang}`;
 
