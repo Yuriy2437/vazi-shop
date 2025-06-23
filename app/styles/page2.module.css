@@ -42,3 +42,15 @@
   background: #cc0000;
   transform: scale(1.05);
 }
+
+/* Адаптивность для длинных текстов */
+@media (max-width: 768px) {
+  .masterBtn {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    text-align: center;
+    white-space: normal;
+    height: auto;
+    min-height: 60px;
+  }
+}
