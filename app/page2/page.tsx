@@ -88,67 +88,68 @@ type Category =
   | 'CONTACTS'
   | null;
 
-// Конфигурация кнопок
 const BUTTON_CONFIG = {
   main: {
     ENGLISH: [
-      { label: 'SOUVENIRS', value: 'SOUVENIRS' as Category },
-      { label: 'POSTCARDS', value: 'POSTCARDS' as Category },
-      { label: 'TEA AND COFFEE', value: 'TEA_COFFEE' as Category },
-      { label: 'BOOKS', value: 'BOOKS' as Category },
-      { label: 'OUR CONTACTS', value: 'CONTACTS' as Category },
+      { label: 'SOUVENIRS', value: 'SOUVENIRS' as const },
+      { label: 'POSTCARDS', value: 'POSTCARDS' as const },
+      { label: 'TEA AND COFFEE', value: 'TEA_COFFEE' as const },
+      { label: 'BOOKS', value: 'BOOKS' as const },
+      { label: 'OUR CONTACTS', value: 'CONTACTS' as const },
     ],
     RUSSIAN: [
-      { label: 'СУВЕНИРЫ', value: 'SOUVENIRS' as Category },
-      { label: 'ОТКРЫТКИ', value: 'POSTCARDS' as Category },
-      { label: 'ЧАЙ И КОФЕ', value: 'TEA_COFFEE' as Category },
-      { label: 'КНИГИ', value: 'BOOKS' as Category },
-      { label: 'НАШИ КОНТАКТЫ', value: 'CONTACTS' as Category },
+      { label: 'СУВЕНИРЫ', value: 'SOUVENIRS' as const },
+      { label: 'ОТКРЫТКИ', value: 'POSTCARDS' as const },
+      { label: 'ЧАЙ И КОФЕ', value: 'TEA_COFFEE' as const },
+      { label: 'КНИГИ', value: 'BOOKS' as const },
+      { label: 'НАШИ КОНТАКТЫ', value: 'CONTACTS' as const },
     ],
     GEORGIAN: [
-      { label: 'სუვენირები', value: 'SOUVENIRS' as Category },
-      { label: 'ღია ბარათები', value: 'POSTCARDS' as Category },
-      { label: 'ჩაი და ყავა', value: 'TEA_COFFEE' as Category },
-      { label: 'წიგნები', value: 'BOOKS' as Category },
-      { label: 'ჩვენი კონტაქტები', value: 'CONTACTS' as Category },
+      { label: 'სუვენირები', value: 'SOUVENIRS' as const },
+      { label: 'ღია ბარათები', value: 'POSTCARDS' as const },
+      { label: 'ჩაი და ყავა', value: 'TEA_COFFEE' as const },
+      { label: 'წიგნები', value: 'BOOKS' as const },
+      { label: 'ჩვენი კონტაქტები', value: 'CONTACTS' as const },
     ],
   },
-  souvenirs: {
-    ENGLISH: [
-      { label: 'EUGENIA STRASHKO SOUVENIRS', href: '/eugenia-works' },
-      { label: 'MARKOV-DOM WORKSHOP', href: '/paul-works' },
-    ],
-    RUSSIAN: [
-      { label: 'СУВЕНИРЫ ХУДОЖНИКА ЕВГЕНИИ СТРАШКО', href: '/eugenia-works' },
-      { label: 'МАСТЕРСКАЯ «MARKOV-DOM»', href: '/paul-works' },
-    ],
-    GEORGIAN: [
-      { label: 'ევგენია სტრაშკოს სუვენირები', href: '/eugenia-works' },
-      { label: 'სახელოსნო «MARKOV-DOM»', href: '/paul-works' },
-    ],
-  },
-  postcards: {
-    ENGLISH: [
-      { label: 'EUGENIA STRASHKO POSTCARDS', href: '/cards' },
-      {
-        label: 'CHRISTIAN POSTCARDS BY EUGENIA STRASHKO',
-        href: '/christian-cards',
-      },
-    ],
-    RUSSIAN: [
-      { label: 'ОТКРЫТКИ ХУДОЖНИКА ЕВГЕНИИ СТРАШКО', href: '/cards' },
-      {
-        label: 'ХРИСТИАНСКИЕ ОТКРЫТКИ ХУДОЖНИКА ЕВГЕНИИ СТРАШКО',
-        href: '/christian-cards',
-      },
-    ],
-    GEORGIAN: [
-      { label: 'ევგენია სტრაშკოს ღია ბარათები', href: '/cards' },
-      {
-        label: 'ევგენია სტრაშკოს ქრისტიანული ღია ბარათები',
-        href: '/christian-cards',
-      },
-    ],
+  sub: {
+    SOUVENIRS: {
+      ENGLISH: [
+        { label: 'EUGENIA STRASHKO SOUVENIRS', href: '/eugenia-works' },
+        { label: 'MARKOV-DOM WORKSHOP', href: '/paul-works' },
+      ],
+      RUSSIAN: [
+        { label: 'СУВЕНИРЫ ХУДОЖНИКА ЕВГЕНИИ СТРАШКО', href: '/eugenia-works' },
+        { label: 'МАСТЕРСКАЯ «MARKOV-DOM»', href: '/paul-works' },
+      ],
+      GEORGIAN: [
+        { label: 'ევგენია სტრაშკოს სუვენირები', href: '/eugenia-works' },
+        { label: 'სახელოსნო «MARKOV-DOM»', href: '/paul-works' },
+      ],
+    },
+    POSTCARDS: {
+      ENGLISH: [
+        { label: 'EUGENIA STRASHKO POSTCARDS', href: '/cards' },
+        {
+          label: 'CHRISTIAN POSTCARDS BY EUGENIA STRASHKO',
+          href: '/christian-cards',
+        },
+      ],
+      RUSSIAN: [
+        { label: 'ОТКРЫТКИ ХУДОЖНИКА ЕВГЕНИИ СТРАШКО', href: '/cards' },
+        {
+          label: 'ХРИСТИАНСКИЕ ОТКРЫТКИ ХУДОЖНИКА ЕВГЕНИИ СТРАШКО',
+          href: '/christian-cards',
+        },
+      ],
+      GEORGIAN: [
+        { label: 'ევგენია სტრაშკოს ღია ბარათები', href: '/cards' },
+        {
+          label: 'ევგენია სტრაშკოს ქრისტიანული ღია ბარათები',
+          href: '/christian-cards',
+        },
+      ],
+    },
   },
   back: {
     ENGLISH: 'BACK',
@@ -164,40 +165,18 @@ const BUTTON_CONFIG = {
 
 export default function Page2() {
   const [category, setCategory] = useState<Category>(null);
-  const [isClient, setIsClient] = useState(false);
+  const [lang, setLang] = useState<Language>('ENGLISH');
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    const langParam = searchParams.get('lang') || 'ENGLISH';
+    const langUpper = langParam.toUpperCase();
+    if (['ENGLISH', 'RUSSIAN', 'GEORGIAN'].includes(langUpper)) {
+      setLang(langUpper as Language);
+    }
+  }, [searchParams]);
 
-  if (!isClient) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.buttonContainer}>
-          {[...Array(5)].map((_, i) => (
-            <div
-              key={i}
-              className={styles.masterBtn}
-              style={{ background: '#ccc' }}
-            />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  // Определяем язык из параметров URL
-  const langParam = searchParams.get('lang') || 'ENGLISH';
-  const langUpper = langParam.toUpperCase();
-  const validLang: Language = (
-    ['ENGLISH', 'RUSSIAN', 'GEORGIAN'].includes(langUpper)
-      ? langUpper
-      : 'ENGLISH'
-  ) as Language;
-
-  // Строим параметр языка для URL
-  const langQuery = `?lang=${validLang}`;
+  const langQuery = `?lang=${lang}`;
 
   return (
     <div className={styles.container}>
@@ -210,10 +189,10 @@ export default function Page2() {
         sizes='(max-width: 768px) 100vw, 50vw'
       />
 
-      {/* Основные категории */}
+      {/* Основное меню */}
       {!category && (
         <div className={styles.buttonContainer}>
-          {BUTTON_CONFIG.main[validLang].map((btn) => (
+          {BUTTON_CONFIG.main[lang].map((btn) => (
             <button
               key={btn.value}
               className={styles.masterBtn}
@@ -225,10 +204,10 @@ export default function Page2() {
         </div>
       )}
 
-      {/* Подкатегории для сувениров */}
+      {/* Меню сувениров */}
       {category === 'SOUVENIRS' && (
         <div className={styles.buttonContainer}>
-          {BUTTON_CONFIG.souvenirs[validLang].map((btn) => (
+          {BUTTON_CONFIG.sub.SOUVENIRS[lang].map((btn) => (
             <a
               key={btn.href}
               href={`${btn.href}${langQuery}`}
@@ -241,15 +220,15 @@ export default function Page2() {
             className={styles.masterBtn}
             onClick={() => setCategory(null)}
           >
-            {BUTTON_CONFIG.back[validLang]}
+            {BUTTON_CONFIG.back[lang]}
           </button>
         </div>
       )}
 
-      {/* Подкатегории для открыток */}
+      {/* Меню открыток */}
       {category === 'POSTCARDS' && (
         <div className={styles.buttonContainer}>
-          {BUTTON_CONFIG.postcards[validLang].map((btn) => (
+          {BUTTON_CONFIG.sub.POSTCARDS[lang].map((btn) => (
             <a
               key={btn.href}
               href={`${btn.href}${langQuery}`}
@@ -262,7 +241,7 @@ export default function Page2() {
             className={styles.masterBtn}
             onClick={() => setCategory(null)}
           >
-            {BUTTON_CONFIG.back[validLang]}
+            {BUTTON_CONFIG.back[lang]}
           </button>
         </div>
       )}
@@ -278,13 +257,13 @@ export default function Page2() {
               cursor: 'default',
             }}
           >
-            {BUTTON_CONFIG.comingSoon[validLang]}
+            {BUTTON_CONFIG.comingSoon[lang]}
           </div>
           <button
             className={styles.masterBtn}
             onClick={() => setCategory(null)}
           >
-            {BUTTON_CONFIG.back[validLang]}
+            {BUTTON_CONFIG.back[lang]}
           </button>
         </div>
       )}
