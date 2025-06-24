@@ -42,7 +42,10 @@ const BUTTON_CONFIG = {
   sub: {
     SOUVENIRS: {
       ENGLISH: [
-        { label: 'EUGENIA STRASHKO SOUVENIRS', href: '/eugenia-works' },
+        {
+          label: 'SOUVENIRS BY ARTIST EUGENIA STRASHKO',
+          href: '/eugenia-works',
+        },
         { label: 'MARKOV-DOM WORKSHOP', href: '/paul-works' },
       ],
       RUSSIAN: [
@@ -56,7 +59,7 @@ const BUTTON_CONFIG = {
     },
     POSTCARDS: {
       ENGLISH: [
-        { label: 'EUGENIA STRASHKO POSTCARDS', href: '/cards' },
+        { label: 'POSTCARDS BY EUGENIA STRASHKO', href: '/cards' },
         {
           label: 'CHRISTIAN POSTCARDS BY EUGENIA STRASHKO',
           href: '/christian-cards',
