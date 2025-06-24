@@ -38,17 +38,14 @@ export default function ContactsPage() {
 
   return (
     <div className='min-h-screen flex items-center justify-center bg-black p-4'>
-      <div className='w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl bg-blue-900 border-4 border-[#8B4513] rounded-2xl px-3 py-5 sm:px-8 sm:py-10 shadow-lg mx-2'>
-        <h1 className='text-xl sm:text-2xl md:text-3xl font-extrabold mb-6 text-red-400 text-center drop-shadow'>
+      <div className='w-full max-w-md bg-blue-900 border-4 border-amber-900 rounded-2xl p-8 shadow-lg'>
+        <h1 className='text-2xl font-bold mb-6 text-red-500 text-center'>
           {currentContent.title}
         </h1>
 
         <div className='space-y-4'>
           {currentContent.contacts.map((contact, index) => (
-            <div
-              key={index}
-              className='text-yellow-200 text-base sm:text-lg md:text-xl font-bold drop-shadow break-words'
-            >
+            <div key={index} className='text-yellow-200 text-lg font-bold'>
               {contact}
             </div>
           ))}
