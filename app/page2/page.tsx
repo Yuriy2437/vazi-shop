@@ -20,7 +20,7 @@ const BUTTON_CONFIG = {
     ENGLISH: [
       { label: 'SOUVENIRS', value: 'SOUVENIRS' as const },
       { label: 'POSTCARDS', value: 'POSTCARDS' as const },
-      { label: 'TEA AND COFFEE', value: 'TEA_COFFEE' as const },
+      { label: 'TEAS AND COFFEE', value: 'TEA_COFFEE' as const },
       { label: 'BOOKS', value: 'BOOKS' as const },
       { label: 'OUR CONTACTS', value: 'CONTACTS' as const },
     ],
