@@ -20,7 +20,7 @@ const BUTTON_CONFIG = {
     ENGLISH: [
       { label: 'SOUVENIRS', value: 'SOUVENIRS' as const },
       { label: 'POSTCARDS', value: 'POSTCARDS' as const },
-      { label: 'TEAS AND COFFEE', value: 'TEA_COFFEE' as const },
+      { label: 'TEA AND COFFEE', value: 'TEA_COFFEE' as const },
       { label: 'BOOKS', value: 'BOOKS' as const },
       { label: 'OUR CONTACTS', value: 'CONTACTS' as const },
     ],
@@ -72,7 +72,7 @@ const BUTTON_CONFIG = {
       GEORGIAN: [
         { label: 'ევგენია სტრაშკოს ღია ბარათები', href: '/cards' },
         {
-          label: 'ევგенია სტრაშკოს ქრისტიანული ღია ბარათები',
+          label: 'ევგენია სტრაშკოს ქრისტიანული ღია ბარათები',
           href: '/christian-cards',
         },
       ],
@@ -128,8 +128,9 @@ function PageContent() {
               className={styles.masterBtn}
               onClick={() => {
                 if (btn.value === 'TEA_COFFEE') {
-                  // Переход на страницу чая с сохранением языка
                   handleNavigation('/tea');
+                } else if (btn.value === 'CONTACTS') {
+                  handleNavigation('/contacts');
                 } else {
                   setCategory(btn.value);
                 }
@@ -184,26 +185,29 @@ function PageContent() {
       )}
 
       {/* Другие категории */}
-      {category && category !== 'SOUVENIRS' && category !== 'POSTCARDS' && (
-        <div className={styles.buttonContainer}>
-          <div
-            className={styles.masterBtn}
-            style={{
-              background: '#888',
-              color: '#fff',
-              cursor: 'default',
-            }}
-          >
-            {BUTTON_CONFIG.comingSoon[lang]}
+      {category &&
+        category !== 'SOUVENIRS' &&
+        category !== 'POSTCARDS' &&
+        category !== 'CONTACTS' && (
+          <div className={styles.buttonContainer}>
+            <div
+              className={styles.masterBtn}
+              style={{
+                background: '#888',
+                color: '#fff',
+                cursor: 'default',
+              }}
+            >
+              {BUTTON_CONFIG.comingSoon[lang]}
+            </div>
+            <button
+              className={styles.masterBtn}
+              onClick={() => setCategory(null)}
+            >
+              {BUTTON_CONFIG.back[lang]}
+            </button>
           </div>
-          <button
-            className={styles.masterBtn}
-            onClick={() => setCategory(null)}
-          >
-            {BUTTON_CONFIG.back[lang]}
-          </button>
-        </div>
-      )}
+        )}
     </div>
   );
 }
