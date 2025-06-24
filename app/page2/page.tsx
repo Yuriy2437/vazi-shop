@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import styles from '../styles/page2.module.css';
 import Loading from './loading';
@@ -20,25 +20,21 @@ const BUTTON_CONFIG = {
     ENGLISH: [
       { label: 'SOUVENIRS', value: 'SOUVENIRS' as const },
       { label: 'POSTCARDS', value: 'POSTCARDS' as const },
-      {
-        label: 'TEA AND COFFEE',
-        value: 'TEA_COFFEE' as const,
-        href: 'https://vaziart.com/tea',
-      },
+      { label: 'TEA AND COFFEE', value: 'TEA_COFFEE' as const },
       { label: 'BOOKS', value: 'BOOKS' as const },
       { label: 'OUR CONTACTS', value: 'CONTACTS' as const },
     ],
     RUSSIAN: [
       { label: 'СУВЕНИРЫ', value: 'SOUVENIRS' as const },
       { label: 'ОТКРЫТКИ', value: 'POSTCARDS' as const },
-      { label: 'ЧАЙ И КОФЕ', value: 'TEA_COFFEE' as const, href: '/tea' },
+      { label: 'ЧАЙ И КОФЕ', value: 'TEA_COFFEE' as const },
       { label: 'КНИГИ', value: 'BOOKS' as const },
       { label: 'НАШИ КОНТАКТЫ', value: 'CONTACTS' as const },
     ],
     GEORGIAN: [
       { label: 'სუვენირები', value: 'SOUVENIRS' as const },
       { label: 'ღია ბარათები', value: 'POSTCARDS' as const },
-      { label: 'ჩაი და ყავა', value: 'TEA_COFFEE' as const, href: '/tea' },
+      { label: 'ჩაი და ყავა', value: 'TEA_COFFEE' as const },
       { label: 'წიგნები', value: 'BOOKS' as const },
       { label: 'ჩვენი კონტაქტები', value: 'CONTACTS' as const },
     ],
@@ -50,7 +46,7 @@ const BUTTON_CONFIG = {
         { label: 'MARKOV-DOM WORKSHOP', href: '/paul-works' },
       ],
       RUSSIAN: [
-        { label: 'СУВЕНИРЫ ХУДОЖНИКА ЕВГЕНИИ СТРАшКО', href: '/eugenia-works' },
+        { label: 'СУВЕНИРЫ ХУДОЖНИКА ЕВГЕНИИ СТРАШКО', href: '/eugenia-works' },
         { label: 'МАСТЕРСКАЯ «MARKOV-DOM»', href: '/paul-works' },
       ],
       GEORGIAN: [
@@ -67,16 +63,16 @@ const BUTTON_CONFIG = {
         },
       ],
       RUSSIAN: [
-        { label: 'ОТКРЫТКИ ХУДОжНИКА ЕВГЕНИИ СТРАшКО', href: '/cards' },
+        { label: 'ОТКРЫТКИ ХУДОЖНИКА ЕВГЕНИИ СТРАШКО', href: '/cards' },
         {
-          label: 'ХРИСТИАНСКИЕ ОТКРЫТКИ ХУДОжНИКА ЕВГЕНИИ СТРАшКО',
+          label: 'ХРИСТИАНСКИЕ ОТКРЫТКИ ХУДОЖНИКА ЕВГЕНИИ СТРАШКО',
           href: '/christian-cards',
         },
       ],
       GEORGIAN: [
         { label: 'ევგენია სტრაშკოს ღია ბარათები', href: '/cards' },
         {
-          label: 'ევგენია სტრაშკოს ქრისტიანული ღია ბარათები',
+          label: 'ევგенია სტრაშკოს ქრისტიანული ღია ბარათები',
           href: '/christian-cards',
         },
       ],
@@ -97,6 +93,7 @@ const BUTTON_CONFIG = {
 function PageContent() {
   const [category, setCategory] = useState<Category>(null);
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [lang, setLang] = useState<Language>('ENGLISH');
 
   useEffect(() => {
@@ -107,7 +104,9 @@ function PageContent() {
     }
   }, [searchParams]);
 
-  const langQuery = `?lang=${lang}`;
+  const handleNavigation = (path: string) => {
+    router.push(`${path}?lang=${lang}`);
+  };
 
   return (
     <div className={styles.container}>
@@ -123,33 +122,22 @@ function PageContent() {
       {/* Основное меню */}
       {!category && (
         <div className={styles.buttonContainer}>
-          {BUTTON_CONFIG.main[lang].map((btn) => {
-            // Для кнопки "ЧАЙ И КОФЕ" создаем прямую ссылку
-            if (btn.value === 'TEA_COFFEE' && btn.href) {
-              return (
-                <a
-                  key={btn.value}
-                  href={btn.href}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className={styles.masterBtn}
-                >
-                  {btn.label}
-                </a>
-              );
-            }
-
-            // Для остальных кнопок
-            return (
-              <button
-                key={btn.value}
-                className={styles.masterBtn}
-                onClick={() => setCategory(btn.value)}
-              >
-                {btn.label}
-              </button>
-            );
-          })}
+          {BUTTON_CONFIG.main[lang].map((btn) => (
+            <button
+              key={btn.value}
+              className={styles.masterBtn}
+              onClick={() => {
+                if (btn.value === 'TEA_COFFEE') {
+                  // Переход на страницу чая с сохранением языка
+                  handleNavigation('/tea');
+                } else {
+                  setCategory(btn.value);
+                }
+              }}
+            >
+              {btn.label}
+            </button>
+          ))}
         </div>
       )}
 
@@ -157,13 +145,13 @@ function PageContent() {
       {category === 'SOUVENIRS' && (
         <div className={styles.buttonContainer}>
           {BUTTON_CONFIG.sub.SOUVENIRS[lang].map((btn) => (
-            <a
+            <button
               key={btn.href}
-              href={`${btn.href}${langQuery}`}
               className={styles.masterBtn}
+              onClick={() => handleNavigation(btn.href)}
             >
               {btn.label}
-            </a>
+            </button>
           ))}
           <button
             className={styles.masterBtn}
@@ -178,13 +166,13 @@ function PageContent() {
       {category === 'POSTCARDS' && (
         <div className={styles.buttonContainer}>
           {BUTTON_CONFIG.sub.POSTCARDS[lang].map((btn) => (
-            <a
+            <button
               key={btn.href}
-              href={`${btn.href}${langQuery}`}
               className={styles.masterBtn}
+              onClick={() => handleNavigation(btn.href)}
             >
               {btn.label}
-            </a>
+            </button>
           ))}
           <button
             className={styles.masterBtn}
