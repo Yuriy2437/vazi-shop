@@ -1,6 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
+import styles from './contacts.module.css';
 
 export default function ContactsPage() {
   const searchParams = useSearchParams();
@@ -37,15 +38,12 @@ export default function ContactsPage() {
   const currentContent = content[langKey] || content.ENGLISH;
 
   return (
-    <div className='min-h-screen flex items-center justify-center bg-black p-4'>
-      <div className='w-full max-w-md bg-blue-900 border-4 border-amber-900 rounded-2xl p-8 shadow-lg'>
-        <h1 className='text-2xl font-bold mb-6 text-red-500 text-center'>
-          {currentContent.title}
-        </h1>
-
-        <div className='space-y-4'>
+    <div className={styles.container}>
+      <div className={styles.card}>
+        <h1 className={styles.title}>{currentContent.title}</h1>
+        <div>
           {currentContent.contacts.map((contact, index) => (
-            <div key={index} className='text-yellow-200 text-lg font-bold'>
+            <div key={index} className={styles.contact}>
               {contact}
             </div>
           ))}
