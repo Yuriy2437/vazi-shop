@@ -42,7 +42,8 @@
   padding: 1rem;
   /* background: #6b4226;
   color: #ffd700; */
-  background: #ff0000 !important; /* Красный фон */
+  /* background: #ff0000 !important; */
+  background: rgb(16, 205, 82); /* темно-зеленый */
   color: white !important; /* Белый текст */
   border: none;
   border-radius: 4px;
