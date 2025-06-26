@@ -8,30 +8,30 @@ export const productDetails: Record<
 > = {
   1: {
     descriptions: {
-      ENGLISH: 'Oak candlestick, rectangular, 10*9*5 cm',
+      ENGLISH: 'Oak candleholder, rectangular, 10*9*5 cm',
       RUSSIAN: 'Подсвечник из дуба, прямоугольный, 10*9*5 см',
       GEORGIAN: 'მუხის სასანთლე, მართკუთხა, 10*9*5 სმ',
     },
   },
   2: {
     descriptions: {
-      ENGLISH: 'Pine candlestick, round, 10*6.5 cm',
+      ENGLISH: 'Pine candleholder, round, 10*6.5 cm',
       RUSSIAN: 'Подсвечник из сосны,  круглый, 10*6,5 см',
       GEORGIAN: 'ფიჭვის სასანთლე, მრგვალი, 10*6.5 სმ',
     },
   },
   3: {
     descriptions: {
-      ENGLISH: 'Magnet from saw cut, round, diameter 6.5 cm',
+      ENGLISH: 'Wooden magnet from saw cut, round, diameter 6.5 cm',
       RUSSIAN: 'Магнит из спила, круглый, диаметр 6,5 см',
       GEORGIAN: 'ხერხით მოჭრილი მაგნიტი, მრგვალი, დიამეტრი 6.5 სმ',
     },
   },
   4: {
     descriptions: {
-      ENGLISH: 'Bookmark, 16*6 cm',
-      RUSSIAN: 'Закладка, 16*6 см',
-      GEORGIAN: 'სანიშნე, 16*6 სმ',
+      ENGLISH: 'Wooden Bookmark, 16*6 cm',
+      RUSSIAN: 'Закладка из дерева, 16*6 см',
+      GEORGIAN: 'ხის სანიშნე, 16*6 სმ',
     },
   },
   5: {

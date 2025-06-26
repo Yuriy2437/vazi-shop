@@ -3,9 +3,9 @@ import type { Language } from '@/app/_utils/types';
 // Общее описание для всех открыток
 const COMMON_DESCRIPTION: Record<Language, string> = {
   ENGLISH:
-    'Postcard by the author Evgeniya, A5 format, several copies can be ordered',
+    'Postcard by the artist Evgeniya, A5 format, several copies can be ordered',
   RUSSIAN:
-    'Открытка авторская мастера Евгении, формат А5, можно заказать несколько экземпляров',
+    'Открытка авторская художника Евгении, формат А5, можно заказать несколько экземпляров',
   GEORGIAN:
     'საფოსტო ბარათი ავტორის, ევგენიას მიერ, A5 ფორმატი, შესაძლებელია რამდენიმე ეგზემპლარის შეკვეთა',
 };

@@ -10,7 +10,7 @@ export default function ChristianCardsGallery({ lang }: { lang: string }) {
   const images = Array.from({ length: TOTAL_CARDS }, (_, i) => ({
     id: i + 1,
     src: `/images/christian-cards/c${i + 1}.jpeg`,
-  }));
+  })).filter((img) => img.id !== 19); // Исключаем 19-ю карточку;
 
   return (
     <div className={styles.galleryContainer}>
