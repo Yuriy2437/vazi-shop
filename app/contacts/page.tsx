@@ -13,7 +13,6 @@ export default function ContactsPage() {
       contacts: [
         '+995 598 09 74 41 – Yuri (WhatsApp)',
         '@uaskar – Yuri (Telegram)',
-        '+995 599 06 80 54 – Alexander (WhatsApp)',
       ],
     },
     RUSSIAN: {
@@ -21,7 +20,6 @@ export default function ContactsPage() {
       contacts: [
         '+995 598 09 74 41 – Юрий (WhatsApp)',
         '@uaskar – Юрий (Telegram)',
-        '+995 599 06 80 54 – Александр (WhatsApp)',
       ],
     },
     GEORGIAN: {
@@ -29,7 +27,6 @@ export default function ContactsPage() {
       contacts: [
         '+995 598 09 74 41 – იური (WhatsApp)',
         '@uaskar – იური (Telegram)',
-        '+995 599 06 80 54 – ალექსანდრე (WhatsApp)',
       ],
     },
   };
